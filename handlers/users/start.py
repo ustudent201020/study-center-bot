@@ -452,7 +452,6 @@ async def score(message: types.Message):
 
         for i in elements:
             winners += int(i["winners"])
-        print(winners)
         top = await db.select_top_users(lim_win=winners)
         for i in top:
             text += f"🏅{counter}-o'rin    {i[1]} • {i[4]} ball\n"
