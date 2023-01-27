@@ -134,7 +134,7 @@ async def change_picture(message: types.Message):
     await RekData.picture.set()
 
 
-@dp.message_handler(content_types=['photo'], state=RekData.picture)
+@dp.message_handler(content_types=['photo', 'text', 'video'], state=RekData.picture)
 async def change_picture_(message: types.Message, state: FSMContext):
     if message.photo:
         photo = message.photo[-1].file_id
@@ -152,6 +152,10 @@ async def change_picture_(message: types.Message, state: FSMContext):
     elif message.text == '🔙️ Orqaga':
         await message.answer('Bosh menu', reply_markup=menu)
         await state.finish()
+    elif message.text == '/start':
+        await message.answer('Bosh menu', reply_markup=menu)
+        await state.finish()
+
     else:
         await message.answer('Faqat rasm qabul qilamiz')
 
@@ -170,6 +174,10 @@ async def change_picture_(message: types.Message, state: FSMContext):
             await db.update_game_text(game_text=message.text)
             await message.answer('Yangilandi', reply_markup=admin_key)
             await state.finish()
+        elif message.text == '/start':
+            await message.answer('Bosh menu', reply_markup=menu)
+            await state.finish()
+
         elif message.text == '🔙️ Orqaga':
             await message.answer('Bosh menu', reply_markup=menu)
             await state.finish()
@@ -195,6 +203,9 @@ async def change_picture_(message: types.Message, state: FSMContext):
         if elements:
             await db.update_gift(gift=message.text)
             await message.answer('Yangilandi', reply_markup=admin_key)
+            await state.finish()
+        elif message.text == '/start':
+            await message.answer('Bosh menu', reply_markup=menu)
             await state.finish()
 
         else:
@@ -228,10 +239,18 @@ async def change_picture_(message: types.Message, state: FSMContext):
                 await state.finish()
             # else:
             # await db.add_text()
+        elif message.text == '/start':
+            await message.answer('Bosh menu', reply_markup=menu)
+            await state.finish()
+
         elif message.text == '🔙️ Orqaga':
             await message.answer('Bosh menu', reply_markup=menu)
             await state.finish()
     except:
+        if message.text == '/start':
+            await message.answer('Bosh menu', reply_markup=menu)
+            await state.finish()
+
         if message.text == '🔙️ Orqaga':
             await message.answer('Bosh menu', reply_markup=menu)
             await state.finish()
@@ -249,6 +268,10 @@ async def shartlar(message: types.Message):
 async def shartlarr(message: types.Message, state: FSMContext):
     if message.text:
         elements = await db.get_elements()
+        if message.text == '/start':
+            await message.answer('Bosh menu', reply_markup=menu)
+            await state.finish()
+
         if elements:
             await db.update_shartlar(shartlar=message.text)
             await message.answer('Yangilandi', reply_markup=admin_key)
@@ -276,6 +299,9 @@ async def change_picture(message: types.Message):
 async def change_picture_(message: types.Message, state: FSMContext):
     try:
         text = int(message.text)
+        if message.text == '/start':
+            await message.answer('Bosh menu', reply_markup=menu)
+            await state.finish()
 
         if text:
             elements = await db.get_elements()
@@ -288,9 +314,13 @@ async def change_picture_(message: types.Message, state: FSMContext):
             await message.answer('Bosh menu', reply_markup=menu)
             await state.finish()
     except Exception as err:
-        print(err)
+
         if message.text == '🔙️ Orqaga':
             await message.answer('Bosh menu', reply_markup=menu)
             await state.finish()
+        elif message.text == '/start':
+            await message.answer('Bosh menu', reply_markup=menu)
+            await state.finish()
+
         else:
             await message.answer('Faqat Son qabul qilamiz')

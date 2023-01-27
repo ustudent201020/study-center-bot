@@ -38,8 +38,10 @@ async def delete_user(message: types.Message, state: FSMContext):
     await message.answer('0')
 
 
-@dp.message_handler(commands=['start'])
+@dp.message_handler(text='/start', state='*')
 async def show_channels(message: types.Message, state: FSMContext):
+    if state:
+        await state.finish()
     args = message.get_args()
     if_old = await db.select_user(telegram_id=message.from_user.id)
     elements = await db.get_elements()
