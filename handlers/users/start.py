@@ -5,7 +5,7 @@ import asyncpg
 from aiogram import types
 from aiogram.types import ParseMode
 from aiogram.dispatcher import FSMContext
-from aiogram.dispatcher.filters import Command
+from aiogram.dispatcher.filters import Command, CommandStart
 
 from data.config import CHANNELS, ADMINS
 from keyboards.default.all import number, menu
@@ -38,10 +38,8 @@ async def delete_user(message: types.Message, state: FSMContext):
     await message.answer('0')
 
 
-@dp.message_handler(text='/start', state='*')
+@dp.message_handler(CommandStart())
 async def show_channels(message: types.Message, state: FSMContext):
-    if state:
-        await state.finish()
     args = message.get_args()
     if_old = await db.select_user(telegram_id=message.from_user.id)
     elements = await db.get_elements()
