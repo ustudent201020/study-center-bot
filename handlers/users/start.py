@@ -537,3 +537,48 @@ async def json_reader(message: types.Message):
         except Exception as e:
             print(e)
     f.close()
+activee = 0
+blockk = 0
+
+async def is_activeee():
+    users = await db.select_all_users()
+    global activee
+    global blockk
+    activee = 0
+    blockk = 0
+    for user in users:
+        user_id = user[3]
+        try:
+            await bot.send_chat_action(chat_id=user_id, action='typing')
+            activee += 1
+            await asyncio.sleep(0.034)
+
+        except Exception as err:
+            blockk += 1
+
+@dp.message_handler(text='Test')
+async def user_type(msg: types.Message):
+    users = await db.select_all_users()
+    global activee
+    global blockk
+    activee = 0
+    blockk = 0
+    for user in users:
+        user_id = user[3]
+        try:
+            await bot.send_chat_action(chat_id=user_id, action='typing')
+            activee += 1
+            await asyncio.sleep(0.034)
+
+        except Exception as err:
+            blockk += 1
+
+@dp.message_handler(text='Statistika 📊')
+async def show_users(message: types.Message):
+    a = await db.count_users()
+    # active = await db.count_active_users()
+    # block = await db.count_block_users()
+    await message.answer(f'<b>🔷 Jami obunachilar: {a} tа</b>\n\n'
+                         f'Active: {activee}\n'
+                         f'Block: {blockk}')
+

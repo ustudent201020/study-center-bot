@@ -96,10 +96,10 @@ async def del_username(message: types.Message, state: FSMContext):
         await state.finish()
 
 
-@dp.message_handler(text='Statistika 📊')
-async def show_users(message: types.Message):
-    a = await db.count_users()
-    await message.answer(f'<b>🔷 Жами обуначилар: {a} та</b>')
+# @dp.message_handler(text='Statistika 📊')
+# async def show_users(message: types.Message):
+#     a = await db.count_users()
+#     await message.answer(f'<b>🔷 Жами обуначилар: {a} та</b>')
 
 
 @dp.message_handler(text='🏘 Bosh menu')
