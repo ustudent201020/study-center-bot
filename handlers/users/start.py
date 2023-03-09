@@ -649,15 +649,14 @@ async def add_user(msg: types.Message):
 async def add_userr(msg: types.Message, state: FSMContext):
     txt = msg.text
     text = txt.split(',')
-    print(text)
     intt = int(text[3])
-    print(type(intt))
+    inttt = int(text[4])
     try:
         user = await db.add_userr(telegram_id=int(text[0]),
                                   full_name=text[1],
                                   username=text[2],
-                                  phone=int(text[3]),
-                                  score=int(text[4])
+                                  phone=intt,
+                                  score=inttt
                                   )
     except Exception as err:
         await msg.answer(f"{err}")
