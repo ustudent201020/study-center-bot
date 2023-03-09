@@ -209,8 +209,7 @@ async def checker(call: types.CallbackQuery, state: FSMContext):
                                  score=scoree
                                  )
     except asyncpg.exceptions.UniqueViolationError:
-        user = await db.select_user(telegram_id=message.from_user.id)
-
+        pass
     await call.answer()
     result = str()
     result2 = str()
@@ -345,7 +344,7 @@ async def tanlov(message: types.Message):
         status *= await subscription.check(user_id=message.from_user.id,
                                            channel=f'{channel}')
     if status:
-        txt += f'\n\nhttps://t.me/Barakali_tanlov_bot?start={message.from_user.id}'
+        txt += f'\n\nhttps://t.me/ccscabot?start={message.from_user.id}'
         await message.answer_photo(photo=photo,
                                    caption=txt
                                    )
