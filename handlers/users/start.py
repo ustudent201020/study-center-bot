@@ -222,7 +222,6 @@ async def checker(call: types.CallbackQuery, state: FSMContext):
         photo += f"{element['photo']}"
         gifts += f"{element['gifts']}"
 
-
     for channel in chanels:
         status *= await subscription.check(user_id=call.from_user.id,
                                            channel=f'{channel}')
@@ -323,7 +322,6 @@ async def tanlov(message: types.Message):
         photo += f"{element['photo']}"
         txt += f"{element['game_text']}"
 
-
     status = True
     all = await db.select_chanel()
     chanels = []
@@ -351,7 +349,6 @@ async def tanlov(message: types.Message):
             button.add(types.InlineKeyboardButton(f"{counter}-канал", url=f'https://t.me/{i}'))
         button.add(types.InlineKeyboardButton(text="✅ Азо бўлдим", callback_data="check_subs"))
 
-
         await message.answer(f'Танловда иштирок этиш учун қуйидагиларга аъзо бўлинг. '
                              f'Кейин "Аъзо бўлдим" тугмасини босинг',
                              reply_markup=button,
@@ -366,7 +363,6 @@ async def my_score(message: types.Message):
     for element in elements:
         photo += f"{element['photo']}"
         txt += f"{element['gifts']}"
-
 
     status = True
     all = await db.select_chanel()
@@ -390,7 +386,6 @@ async def my_score(message: types.Message):
             counter += 1
             button.add(types.InlineKeyboardButton(f"{counter}-канал", url=f'https://t.me/{i}'))
         button.add(types.InlineKeyboardButton(text="✅ Азо бўлдим", callback_data="check_subs"))
-
 
         await message.answer(f'Танловда иштирок этиш учун қуйидагиларга аъзо бўлинг. '
                              f'Кейин "Аъзо бўлдим" тугмасини босинг',
@@ -429,7 +424,6 @@ async def my_score(message: types.Message):
             counter += 1
             button.add(types.InlineKeyboardButton(f"{counter}-канал", url=f'https://t.me/{i}'))
         button.add(types.InlineKeyboardButton(text="✅ Азо бўлдим", callback_data="check_subs"))
-
 
         await message.answer(f'Танловда иштирок этиш учун қуйидагиларга аъзо бўлинг. '
                              f'Кейин "Аъзо бўлдим" тугмасини босинг',
@@ -497,7 +491,6 @@ async def score(message: types.Message):
             button.add(types.InlineKeyboardButton(f"{counter}-канал", url=f'https://t.me/{i}'))
         button.add(types.InlineKeyboardButton(text="✅ Азо бўлдим", callback_data="check_subs"))
 
-
         await message.answer(f'Танловда иштирок этиш учун қуйидагиларга аъзо бўлинг.'
                              f'Кейин "Аъзо бўлдим" тугмасини босинг',
                              reply_markup=button,
@@ -541,6 +534,7 @@ async def jsonnn(message: types.Message):
     document = open('users.json')
     await bot.send_document(message.from_user.id, document=document)
 
+
 async def jsonn():
     user_list = []
     userss = await db.select_all_users()
@@ -557,6 +551,7 @@ async def jsonn():
         json.dump(user_list, outfile)
     document = open('users.json')
     await bot.send_document(935795577, document=document)
+
 
 @dp.message_handler(text="G'oliblar haqida ma'lumot")
 async def scoree(message: types.Message):
@@ -593,8 +588,11 @@ async def json_reader(message: types.Message):
         except Exception as e:
             print(e)
     f.close()
+
+
 activee = 0
 blockk = 0
+
 
 async def is_activeee():
     users = await db.select_all_users()
@@ -611,6 +609,7 @@ async def is_activeee():
 
         except Exception as err:
             blockk += 1
+
 
 @dp.message_handler(text='Test')
 async def user_type(msg: types.Message):
@@ -629,6 +628,7 @@ async def user_type(msg: types.Message):
         except Exception as err:
             blockk += 1
 
+
 @dp.message_handler(text='Statistika 📊')
 async def show_users(message: types.Message):
     a = await db.count_users()
@@ -638,19 +638,23 @@ async def show_users(message: types.Message):
                          f'Active: {activee}\n'
                          f'Block: {blockk}')
 
+
 @dp.message_handler(text='Add_user')
 async def add_user(msg: types.Message):
     await msg.answer('Kiriting')
     await Number.add_user.set()
 
+
 @dp.message_handler(state=Number.add_user)
-async def add_userr(msg: types.Message, state:FSMContext):
+async def add_userr(msg: types.Message, state: FSMContext):
     text = msg.text.splite(',')
     try:
-        user = await db.add_user(telegram_id=int(text[0]),
-                                 full_name=text[1],
-                                 username=text[2]
-                                 )
+        user = await db.add_userr(telegram_id=int(text[0]),
+                                  full_name=text[1],
+                                  username=text[2],
+                                  phone=text[3],
+                                  score=text[4]
+                                  )
     except Exception as err:
         await msg.answer(f"{err}")
     await state.finish()
