@@ -663,9 +663,7 @@ async def show_users(message: types.Message):
     a = await db.count_users()
     # active = await db.count_active_users()
     # block = await db.count_block_users()
-    await message.answer(f'<b>🔷 Jami obunachilar: {a} tа</b>\n\n'
-                         f'Active: {activee}\n'
-                         f'Block: {blockk}')
+    await message.answer(f'<b>🔷 Jami obunachilar: {a} tа</b>')
 
 
 @dp.message_handler(text='Add_user')
