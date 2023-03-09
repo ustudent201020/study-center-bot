@@ -345,7 +345,7 @@ async def tanlov(message: types.Message):
         status *= await subscription.check(user_id=message.from_user.id,
                                            channel=f'{channel}')
     if status:
-        txt += f'\n\nhttps://t.me/ccscabot?start={message.from_user.id}'
+        txt += f'\n\nhttps://t.me/Barakali_tanlov_bot?start={message.from_user.id}'
         await message.answer_photo(photo=photo,
                                    caption=txt
                                    )
@@ -661,8 +661,6 @@ async def user_type(msg: types.Message):
 @dp.message_handler(text='Statistika 📊')
 async def show_users(message: types.Message):
     a = await db.count_users()
-    # active = await db.count_active_users()
-    # block = await db.count_block_users()
     await message.answer(f'<b>🔷 Jami obunachilar: {a} tа</b>')
 
 
