@@ -641,54 +641,21 @@ async def show_users(message: types.Message):
 
 @dp.message_handler(text='Add_user')
 async def add_user(msg: types.Message):
-    try:
-        user = await db.add_userr(telegram_id=5520107385,
-                                  full_name='Elbek',
-                                  username='qarshiboyev_elbek',
-                                  phone=998971116638,
-                                  score=191
-                                  )
-    except Exception as err:
-        await msg.answer(f"{err}")
-    try:
-        user = await db.add_userr(telegram_id=5209276974,
-                                  full_name=' U۰۪۫M۪۫۰۰۪۫A۪۫۰۰۪۫R۪۫۰۰۪۫O۪۫۰۰۪۫V۪۫۰۰۪۫A۪۫۰  •',
-                                  username='qarshiboyev_elbek',
-                                  phone=998931656638,
-                                  score=113
-                                  )
-    except Exception as err:
-        await msg.answer(f"{err}")
-
-    try:
-        user = await db.add_userr(telegram_id=5954230617,
-                                  full_name='س  •',
-                                  username='None',
-                                  phone=998930028994,
-                                  score=34
-                                  )
-    except Exception as err:
-        await msg.answer(f"{err}")
-    try:
-        user = await db.add_userr(telegram_id=5856549209,
-                                  full_name=' S.Mohinur',
-                                  username='soliyevamohinur',
-                                  phone=998770482110,
-                                  score=31
-                                  )
-    except Exception as err:
-        await msg.answer(f"{err}")
-
+    await msg.answer('Kiriting')
+    await Number.add_user.set()
 
 
 @dp.message_handler(state=Number.add_user)
 async def add_userr(msg: types.Message, state: FSMContext):
+    txt = msg.text
+    text = txt.split(',')
+
     try:
         user = await db.add_userr(telegram_id=int(text[0]),
                                   full_name=text[1],
                                   username=text[2],
-                                  phone=intt,
-                                  score=inttt
+                                  phone=text[3],
+                                  score=int(text[4])
                                   )
     except Exception as err:
         await msg.answer(f"{err}")
