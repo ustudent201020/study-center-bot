@@ -649,6 +649,9 @@ async def add_user(msg: types.Message):
 async def add_userr(msg: types.Message, state: FSMContext):
     txt = msg.text
     text = txt.split(',')
+    print(text)
+    intt = int(text[3])
+    print(type(intt))
     try:
         user = await db.add_userr(telegram_id=int(text[0]),
                                   full_name=text[1],
