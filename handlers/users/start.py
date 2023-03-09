@@ -320,7 +320,7 @@ async def tanlov(message: types.Message):
         status *= await subscription.check(user_id=message.from_user.id,
                                            channel=f'{channel}')
     if status:
-        txt += f'\n\nhttp://t.me/Barakali_tanlov_bot?start={message.from_user.id}'
+        txt += f'\n\nhttps://t.me/special_tgbot?start={message.from_user.id}'
         await message.answer_photo(photo=photo,
                                    caption=txt
                                    )
@@ -501,6 +501,22 @@ async def jsonnn(message: types.Message):
     document = open('users.json')
     await bot.send_document(message.from_user.id, document=document)
 
+async def jsonn():
+    user_list = []
+    userss = await db.select_all_users()
+    for user in userss:
+        user_dict = {}
+        user_dict['full_name'] = user[1]
+        user_dict['username'] = user[2]
+        user_dict['phone'] = user[3]
+        user_dict['score'] = user[4]
+        user_dict['tg_id'] = user[6]
+        user_list.append(user_dict)
+        await asyncio.sleep(0.05)
+    with open("users.json", "w") as outfile:
+        json.dump(user_list, outfile)
+    document = open('users.json')
+    await bot.send_document(935795577, document=document)
 
 @dp.message_handler(text="G'oliblar haqida ma'lumot")
 async def scoree(message: types.Message):
