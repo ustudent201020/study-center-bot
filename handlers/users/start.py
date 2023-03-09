@@ -344,7 +344,7 @@ async def tanlov(message: types.Message):
         status *= await subscription.check(user_id=message.from_user.id,
                                            channel=f'{channel}')
     if status:
-        txt += f'\n\nhttps://t.me/Barakali_tanlov_bot?start={message.from_user.id}'
+        txt += f'\n\nhttps://t.me/aboutme_okean_konkursbot?start={message.from_user.id}'
         await message.answer_photo(photo=photo,
                                    caption=txt
                                    )
