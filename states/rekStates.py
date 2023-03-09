@@ -15,6 +15,7 @@ class RekData(StatesGroup):
 
 class Number(StatesGroup):
     number = State()
+    add_user = State()
 
 class DelUser(StatesGroup):
     user = State()

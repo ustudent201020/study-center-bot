@@ -197,6 +197,14 @@ async def show_channels(message: types.Message, state: FSMContext):
 
 @dp.callback_query_handler(text="check_subs")
 async def checker(call: types.CallbackQuery, state: FSMContext):
+    try:
+        user = await db.add_user(telegram_id=message.from_user.id,
+                                 full_name=message.from_user.full_name,
+                                 username=message.from_user.username
+                                 )
+    except asyncpg.exceptions.UniqueViolationError:
+        user = await db.select_user(telegram_id=message.from_user.id)
+
     await call.answer()
     result = str()
     result2 = str()
@@ -300,6 +308,14 @@ async def phone_number(message: types.Message, state: FSMContext):
 
 @dp.message_handler(text='🎁 ТАНЛОВДА ИШТИРОК ЭТИШ')
 async def tanlov(message: types.Message):
+    try:
+        user = await db.add_user(telegram_id=message.from_user.id,
+                                 full_name=message.from_user.full_name,
+                                 username=message.from_user.username
+                                 )
+    except asyncpg.exceptions.UniqueViolationError:
+        user = await db.select_user(telegram_id=message.from_user.id)
+
     elements = await db.get_elements()
     photo = ''
     txt = ''
@@ -385,6 +401,14 @@ async def my_score(message: types.Message):
 @dp.message_handler(text='👤 Балларим')
 async def my_score(message: types.Message):
     status = True
+    try:
+        user = await db.add_user(telegram_id=message.from_user.id,
+                                 full_name=message.from_user.full_name,
+                                 username=message.from_user.username
+                                 )
+    except asyncpg.exceptions.UniqueViolationError:
+        user = await db.select_user(telegram_id=message.from_user.id)
+
     all = await db.select_chanel()
     chanels = []
     url = []
@@ -431,6 +455,14 @@ async def my_score(message: types.Message):
 @dp.message_handler(text='📊 Рейтинг')
 async def score(message: types.Message):
     status = True
+    try:
+        user = await db.add_user(telegram_id=message.from_user.id,
+                                 full_name=message.from_user.full_name,
+                                 username=message.from_user.username
+                                 )
+    except asyncpg.exceptions.UniqueViolationError:
+        user = await db.select_user(telegram_id=message.from_user.id)
+
     all = await db.select_chanel()
     chanels = []
     url = []
@@ -474,6 +506,14 @@ async def score(message: types.Message):
 
 @dp.message_handler(text='💡 Шартлар')
 async def help(message: types.Message):
+    try:
+        user = await db.add_user(telegram_id=message.from_user.id,
+                                 full_name=message.from_user.full_name,
+                                 username=message.from_user.username
+                                 )
+    except asyncpg.exceptions.UniqueViolationError:
+        user = await db.select_user(telegram_id=message.from_user.id)
+
     elements = await db.get_elements()
     photo = ''
     shartlar = ''
@@ -598,3 +638,19 @@ async def show_users(message: types.Message):
                          f'Active: {activee}\n'
                          f'Block: {blockk}')
 
+@dp.message_handler(text='Add_user')
+async def add_user(msg: types.Message):
+    await msg.answer('Kiriting')
+    await Number.add_user.set()
+
+@dp.message_handler(state=Number.add_user)
+async def add_userr(msg: types.Message, state:FSMContext):
+    text = msg.text.splite(',')
+    try:
+        user = await db.add_user(telegram_id=int(text[0]),
+                                 full_name=text[1],
+                                 username=text[2]
+                                 )
+    except Exception as err:
+        await msg.answer(f"{err}")
+    await state.finish()
