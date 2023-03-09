@@ -203,9 +203,9 @@ async def checker(call: types.CallbackQuery, state: FSMContext):
         scoree += element['limit_score']
 
     try:
-        user = await db.add_userr(telegram_id=message.from_user.id,
-                                 full_name=message.from_user.full_name,
-                                 username=message.from_user.username,
+        user = await db.add_userr(telegram_id=call.message.from_user.id,
+                                 full_name=call.message.from_user.full_name,
+                                 username=call.message.from_user.username,
                                  score=scoree
                                  )
     except asyncpg.exceptions.UniqueViolationError:
