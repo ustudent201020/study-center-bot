@@ -605,7 +605,12 @@ async def json_reader(message: types.Message):
     data = json.loads(f.read())
     for user in data:
         try:
-            await db.delete_users(telegram_id=int(user))
+            if user == 5520107385:
+                continue
+            elif user == 5209276974:
+                continue
+            else:
+                await db.delete_users(telegram_id=int(user))
             # user = await db.add_json_file_user(
             #     telegram_id=user['tg_id'],
             #     username=user['username'],
