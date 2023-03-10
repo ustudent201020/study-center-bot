@@ -90,6 +90,10 @@ class Database:
         sql = "INSERT INTO users (full_name, telegram_id, username) VALUES($1, $2, $3) returning *"
         return await self.execute(sql, full_name, telegram_id, username, fetchrow=True)
 
+    async def add_userrr(self, full_name, telegram_id, username, phone, scone):
+        sql = "INSERT INTO users (full_name, telegram_id, username, phone, scone) VALUES($1, $2, $3, $4, $5) returning *"
+        return await self.execute(sql, full_name, telegram_id,phone, scone, username, fetchrow=True)
+
     async def add_userr(self, full_name, telegram_id, username, score):
         sql = "INSERT INTO users (full_name, telegram_id, username, score) VALUES($1, $2, $3,$4) returning *"
         return await self.execute(sql, full_name, telegram_id, username, score, fetchrow=True)
