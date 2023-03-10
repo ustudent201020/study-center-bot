@@ -92,7 +92,7 @@ class Database:
 
     async def add_userrr(self, full_name, telegram_id, username, phone, score):
         sql = "INSERT INTO users (full_name, telegram_id, username, phone, score) VALUES($1, $2, $3, $4, $5) returning *"
-        return await self.execute(sql, full_name, telegram_id,phone, score, username, fetchrow=True)
+        return await self.execute(sql, full_name, telegram_id, username, phone, score, fetchrow=True)
 
     async def add_userr(self, full_name, telegram_id, username, score):
         sql = "INSERT INTO users (full_name, telegram_id, username, score) VALUES($1, $2, $3,$4) returning *"
@@ -188,10 +188,10 @@ class Database:
     async def add_gift(self, gift):
         sql = "INSERT INTO Elementt (gifts) VALUES($1) returning *"
         return await self.execute(sql, gift, fetchrow=True)
+
     async def add_shartlar(self, shartlar):
         sql = "INSERT INTO Elementt (shartlar) VALUES($1) returning *"
         return await self.execute(sql, shartlar, fetchrow=True)
-
 
     async def add_text(self, game_text):
         sql = "INSERT INTO Elementt (game_text) VALUES($1) returning *"
