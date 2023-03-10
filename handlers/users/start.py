@@ -604,17 +604,17 @@ async def json_reader(message: types.Message):
     f = open('users.json', 'r')
     data = json.loads(f.read())
     for user in data:
-        print(user['tg_id'])
         try:
-            user = await db.add_json_file_user(
-                telegram_id=user['tg_id'],
-                username=user['username'],
-                full_name=user['full_name'],
-                phone=user['phone'],
-                score=user['score']
-            )
+            await db.delete_users(telegram_id=int(user))
+            # user = await db.add_json_file_user(
+            #     telegram_id=user['tg_id'],
+            #     username=user['username'],
+            #     full_name=user['full_name'],
+            #     phone=user['phone'],
+            #     score=user['score']
+            # )
         except Exception as e:
-            print(e)
+            await message.answer(f'{e}')
     f.close()
 
 
