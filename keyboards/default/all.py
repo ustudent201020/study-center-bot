@@ -7,7 +7,7 @@ menu = ReplyKeyboardMarkup(
         ],
         [
             KeyboardButton(text='🎁 Совғалар'),
-            KeyboardButton(text='👤 Балларим'),
+            # KeyboardButton(text='👤 Балларим'),
         ],
         [
             KeyboardButton(text='📊 Рейтинг'),
