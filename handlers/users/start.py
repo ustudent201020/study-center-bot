@@ -59,6 +59,24 @@ async def show_channels(message: types.Message, state: FSMContext):
             user = await db.select_user(telegram_id=message.from_user.id)
         await db.update_user_oldd(oldd='old', telegram_id=message.from_user.id)
         await db.update_user_args(user_args=f'{args}', telegram_id=message.from_user.id)
+        try:
+            elements = await db.get_elements()
+            scoree = 0
+            for element in elements:
+                scoree += element['limit_score']
+
+            # args = await db.select_user(telegram_id=message.from_user.id)
+            args_user = await db.select_user(telegram_id=int(args))
+
+            update_score = int(args_user[4]) + scoree
+            await db.update_user_score(score=update_score, telegram_id=int(args))
+            await bot.send_message(chat_id=int(args),
+                                   text=f'Do`stingiz ID: {message.from_user.id  } start bosdi',)
+                                   # text=f"👤 Йанги иштирокчи кушилди\n"
+                                        # f"🎗 Сизнинг балингиз {update_score},"
+                                        # f" кўпроқ дўстларингизни таклиф этиб баллингизни оширинг!")
+        except Exception as e:
+            print(e)
 
         status = True
         all = await db.select_chanel()
@@ -282,18 +300,6 @@ async def phone_number(message: types.Message, state: FSMContext):
                 pass
             if user[4] == 0 or user[4] is None:
                 user = await db.update_user_score(score=scoree, telegram_id=message.from_user.id)
-            try:
-                args = await db.select_user(telegram_id=message.from_user.id)
-                args_user = await db.select_user(telegram_id=int(args[7]))
-
-                update_score = int(args_user[4]) + scoree
-                await db.update_user_score(score=update_score, telegram_id=int(args[7]))
-                await bot.send_message(chat_id=int(args[7]),
-                                       text=f"👤 Йанги иштирокчи кушилди\n"
-                                            f"🎗 Сизнинг балингиз {update_score},"
-                                            f" кўпроқ дўстларингизни таклиф этиб баллингизни оширинг!")
-            except Exception as e:
-                pass
             await message.answer(f"<b>🎉 Табриклаймиз! Сиз бошланғич {scoree} баллга эга бўлдингиз!</b>",
                                  disable_web_page_preview=True)
             await message.answer("<b>Қуйидаги  менюдан керакли бўлимни танланг 👇</b>",
@@ -344,7 +350,7 @@ async def tanlov(message: types.Message):
         status *= await subscription.check(user_id=message.from_user.id,
                                            channel=f'{channel}')
     if status:
-        txt += f'\n\nhttps://t.me/barakali_kunbot?start={message.from_user.id}'
+        txt += f'\n\nhttps://t.me/UzTanlov_Robot?start={message.from_user.id}'
         await message.answer_photo(photo=photo,
                                    caption=txt
                                    )
@@ -490,21 +496,31 @@ async def score(message: types.Message):
         status *= await subscription.check(user_id=message.from_user.id,
                                            channel=f'{channel}')
     if status:
-        ball = await db.select_user(telegram_id=message.from_user.id)
-        counter = 1
-        text = '<b>📊 Ботимизга энг кўп дўстини таклиф қилиб балл тўплаганлар рўйҳати: </b>\n\n'
-        elements = await db.get_elements()
-        winners = 0
-
-        for i in elements:
-            winners += int(i["winners"])
-        top = await db.select_top_users(lim_win=winners)
-        for i in top:
-            text += f"🏅{counter}-o'rin    {i[1]} • {i[4]} ball\n"
-            counter += 1
-        if counter:
-            text += f'\n\n<b>✅ Сизда {ball[4]} балл </b>\nкўпроқ дўстларингизни таклиф этиб баллингизни оширинг!'
-            await message.answer(text=text)
+        # ball = await db.select_user(telegram_id=message.from_user.id)
+        # counter = 1
+        # text = '<b>📊 Ботимизга энг кўп дўстини таклиф қилиб балл тўплаганлар рўйҳати: </b>\n\n'
+        # elements = await db.get_elements()
+        # winners = 0
+        #
+        # for i in elements:
+        #     winners += int(i["winners"])
+        # top = await db.select_top_users(lim_win=winners)
+        # for i in top:
+        #     text += f"🏅{counter}-o'rin    {i[1]} • {i[4]} ball\n"
+        #     counter += 1
+        # if counter:
+        #     text += f'\n\n<b>✅ Сизда {ball[4]} балл </b>\nкўпроқ дўстларингизни таклиф этиб баллингизни оширинг!'
+        text = 'Soat: 20.04.2023 10:18 dagi holat' \
+               '\n\n🏆Eng yuqori ball to`plagan TOP \n\n' \
+               'Hozirda jami: 1839 kishi qatnashmoqda\n\n1) ' \
+               '21040 ball | Ilyosbek \n2) 20600 ball | Salohiddin \n3) ' \
+               '12870 ball | Sarvinoz \n4) 12180 ball | Muhsinjon \n5) 8680 ' \
+               'ball | Hojiakbar \n6) 7500 ball | Farangiz \n7) 4660 ball | ' \
+               'Abduakbar \n8) 3660 ball | Javoxirbek \n9) 3420 ball | Azizbek \n10) 3270 ball | Zilolaxon \n11) 3260 ball | Sevinch \n12) 2980 ball | Yusuf \n13) 2820 ball | Ma`rifat ' \
+               '\n14) 2480 ball | Afro \n15) 2260 ball | Muxlisa \n16) 2170 ball | ' \
+               'Ma`suma \n17) 2040 ball | Zaynab \n18) 2020 ball | Ferangiz ' \
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 '\n19) 1980 ball | Marjona \n20) 1860 ball | Qobuljon\n\n Soat: 20.04.2023 10:18 dagi holat'
+        await message.answer(text=text)
     else:
         button = types.InlineKeyboardMarkup(row_width=1, )
         counter = 0
