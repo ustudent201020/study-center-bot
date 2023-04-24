@@ -59,24 +59,6 @@ async def show_channels(message: types.Message, state: FSMContext):
             user = await db.select_user(telegram_id=message.from_user.id)
         await db.update_user_oldd(oldd='old', telegram_id=message.from_user.id)
         await db.update_user_args(user_args=f'{args}', telegram_id=message.from_user.id)
-        try:
-            elements = await db.get_elements()
-            scoree = 0
-            for element in elements:
-                scoree += element['limit_score']
-
-            # args = await db.select_user(telegram_id=message.from_user.id)
-            args_user = await db.select_user(telegram_id=int(args))
-
-            update_score = int(args_user[4]) + scoree
-            await db.update_user_score(score=update_score, telegram_id=int(args))
-            await bot.send_message(chat_id=int(args),
-                                   text=f'Do`stingiz ID: {message.from_user.id  } start bosdi',)
-                                   # text=f"👤 Йанги иштирокчи кушилди\n"
-                                        # f"🎗 Сизнинг балингиз {update_score},"
-                                        # f" кўпроқ дўстларингизни таклиф этиб баллингизни оширинг!")
-        except Exception as e:
-            print(e)
 
         status = True
         all = await db.select_chanel()
@@ -215,19 +197,6 @@ async def show_channels(message: types.Message, state: FSMContext):
 
 @dp.callback_query_handler(text="check_subs")
 async def checker(call: types.CallbackQuery, state: FSMContext):
-    elements = await db.get_elements()
-    scoree = 0
-    for element in elements:
-        scoree += element['limit_score']
-
-    try:
-        user = await db.add_userr(telegram_id=call.message.from_user.id,
-                                 full_name=call.message.from_user.full_name,
-                                 username=call.message.from_user.username,
-                                 score=scoree
-                                 )
-    except asyncpg.exceptions.UniqueViolationError:
-        pass
     await call.answer()
     result = str()
     result2 = str()
@@ -238,11 +207,13 @@ async def checker(call: types.CallbackQuery, state: FSMContext):
     for i in all:
         chanels.append(i['chanelll'])
         url.append(i['url'])
+    elements = await db.get_elements()
     photo = ''
     gifts = ''
     for element in elements:
         photo += f"{element['photo']}"
         gifts += f"{element['gifts']}"
+
 
     for channel in chanels:
         status *= await subscription.check(user_id=call.from_user.id,
@@ -300,6 +271,18 @@ async def phone_number(message: types.Message, state: FSMContext):
                 pass
             if user[4] == 0 or user[4] is None:
                 user = await db.update_user_score(score=scoree, telegram_id=message.from_user.id)
+            try:
+                args = await db.select_user(telegram_id=message.from_user.id)
+                args_user = await db.select_user(telegram_id=int(args[7]))
+
+                update_score = int(args_user[4]) + scoree
+                await db.update_user_score(score=update_score, telegram_id=int(args[7]))
+                await bot.send_message(chat_id=int(args[7]),
+                                       text=f"👤 Йанги иштирокчи кушилди\n"
+                                            f"🎗 Сизнинг балингиз {update_score},"
+                                            f" кўпроқ дўстларингизни таклиф этиб баллингизни оширинг!")
+            except Exception as e:
+                pass
             await message.answer(f"<b>🎉 Табриклаймиз! Сиз бошланғич {scoree} баллга эга бўлдингиз!</b>",
                                  disable_web_page_preview=True)
             await message.answer("<b>Қуйидаги  менюдан керакли бўлимни танланг 👇</b>",
@@ -318,25 +301,12 @@ async def phone_number(message: types.Message, state: FSMContext):
 @dp.message_handler(text='🎁 ТАНЛОВДА ИШТИРОК ЭТИШ')
 async def tanlov(message: types.Message):
     elements = await db.get_elements()
-    scoree = 0
-    for element in elements:
-        scoree += element['limit_score']
-
-    try:
-        user = await db.add_userr(telegram_id=message.from_user.id,
-                                  full_name=message.from_user.full_name,
-                                  username=message.from_user.username,
-                                  score=scoree
-                                  )
-    except asyncpg.exceptions.UniqueViolationError:
-        user = await db.select_user(telegram_id=message.from_user.id)
-
-    elements = await db.get_elements()
     photo = ''
     txt = ''
     for element in elements:
         photo += f"{element['photo']}"
         txt += f"{element['game_text']}"
+
 
     status = True
     all = await db.select_chanel()
@@ -350,7 +320,7 @@ async def tanlov(message: types.Message):
         status *= await subscription.check(user_id=message.from_user.id,
                                            channel=f'{channel}')
     if status:
-        txt += f'\n\nhttps://t.me/UzTanlov_Robot?start={message.from_user.id}'
+        txt += f'\n\nhttps://t.me/aboutme_okean_konkursbot?start={message.from_user.id}'
         await message.answer_photo(photo=photo,
                                    caption=txt
                                    )
@@ -364,6 +334,7 @@ async def tanlov(message: types.Message):
             counter += 1
             button.add(types.InlineKeyboardButton(f"{counter}-канал", url=f'https://t.me/{i}'))
         button.add(types.InlineKeyboardButton(text="✅ Азо бўлдим", callback_data="check_subs"))
+
 
         await message.answer(f'Танловда иштирок этиш учун қуйидагиларга аъзо бўлинг. '
                              f'Кейин "Аъзо бўлдим" тугмасини босинг',
@@ -379,6 +350,7 @@ async def my_score(message: types.Message):
     for element in elements:
         photo += f"{element['photo']}"
         txt += f"{element['gifts']}"
+
 
     status = True
     all = await db.select_chanel()
@@ -403,6 +375,7 @@ async def my_score(message: types.Message):
             button.add(types.InlineKeyboardButton(f"{counter}-канал", url=f'https://t.me/{i}'))
         button.add(types.InlineKeyboardButton(text="✅ Азо бўлдим", callback_data="check_subs"))
 
+
         await message.answer(f'Танловда иштирок этиш учун қуйидагиларга аъзо бўлинг. '
                              f'Кейин "Аъзо бўлдим" тугмасини босинг',
                              reply_markup=button,
@@ -412,20 +385,6 @@ async def my_score(message: types.Message):
 @dp.message_handler(text='👤 Балларим')
 async def my_score(message: types.Message):
     status = True
-    elements = await db.get_elements()
-    scoree = 0
-    for element in elements:
-        scoree += element['limit_score']
-
-    try:
-        user = await db.add_userr(telegram_id=message.from_user.id,
-                                  full_name=message.from_user.full_name,
-                                  username=message.from_user.username,
-                                  score=scoree
-                                  )
-    except asyncpg.exceptions.UniqueViolationError:
-        user = await db.select_user(telegram_id=message.from_user.id)
-
     all = await db.select_chanel()
     chanels = []
     url = []
@@ -446,6 +405,7 @@ async def my_score(message: types.Message):
             counter += 1
             button.add(types.InlineKeyboardButton(f"{counter}-канал", url=f'https://t.me/{i}'))
         button.add(types.InlineKeyboardButton(text="✅ Азо бўлдим", callback_data="check_subs"))
+
 
         await message.answer(f'Танловда иштирок этиш учун қуйидагиларга аъзо бўлинг. '
                              f'Кейин "Аъзо бўлдим" тугмасини босинг',
@@ -471,20 +431,6 @@ async def my_score(message: types.Message):
 @dp.message_handler(text='📊 Рейтинг')
 async def score(message: types.Message):
     status = True
-    elements = await db.get_elements()
-    scoree = 0
-    for element in elements:
-        scoree += element['limit_score']
-
-    try:
-        user = await db.add_userr(telegram_id=message.from_user.id,
-                                  full_name=message.from_user.full_name,
-                                  username=message.from_user.username,
-                                  score=scoree
-                                  )
-    except asyncpg.exceptions.UniqueViolationError:
-        user = await db.select_user(telegram_id=message.from_user.id)
-
     all = await db.select_chanel()
     chanels = []
     url = []
@@ -496,31 +442,21 @@ async def score(message: types.Message):
         status *= await subscription.check(user_id=message.from_user.id,
                                            channel=f'{channel}')
     if status:
-        # ball = await db.select_user(telegram_id=message.from_user.id)
-        # counter = 1
-        # text = '<b>📊 Ботимизга энг кўп дўстини таклиф қилиб балл тўплаганлар рўйҳати: </b>\n\n'
-        # elements = await db.get_elements()
-        # winners = 0
-        #
-        # for i in elements:
-        #     winners += int(i["winners"])
-        # top = await db.select_top_users(lim_win=winners)
-        # for i in top:
-        #     text += f"🏅{counter}-o'rin    {i[1]} • {i[4]} ball\n"
-        #     counter += 1
-        # if counter:
-        #     text += f'\n\n<b>✅ Сизда {ball[4]} балл </b>\nкўпроқ дўстларингизни таклиф этиб баллингизни оширинг!'
-        text = 'Soat: 20.04.2023 10:18 dagi holat' \
-               '\n\n🏆Eng yuqori ball to`plagan TOP \n\n' \
-               'Hozirda jami: 1839 kishi qatnashmoqda\n\n1) ' \
-               '21040 ball | Ilyosbek \n2) 20600 ball | Salohiddin \n3) ' \
-               '12870 ball | Sarvinoz \n4) 12180 ball | Muhsinjon \n5) 8680 ' \
-               'ball | Hojiakbar \n6) 7500 ball | Farangiz \n7) 4660 ball | ' \
-               'Abduakbar \n8) 3660 ball | Javoxirbek \n9) 3420 ball | Azizbek \n10) 3270 ball | Zilolaxon \n11) 3260 ball | Sevinch \n12) 2980 ball | Yusuf \n13) 2820 ball | Ma`rifat ' \
-               '\n14) 2480 ball | Afro \n15) 2260 ball | Muxlisa \n16) 2170 ball | ' \
-               'Ma`suma \n17) 2040 ball | Zaynab \n18) 2020 ball | Ferangiz ' \
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 '\n19) 1980 ball | Marjona \n20) 1860 ball | Qobuljon\n\n Soat: 20.04.2023 10:18 dagi holat'
-        await message.answer(text=text)
+        ball = await db.select_user(telegram_id=message.from_user.id)
+        counter = 1
+        text = '<b>📊 Ботимизга энг кўп дўстини таклиф қилиб балл тўплаганлар рўйҳати: </b>\n\n'
+        elements = await db.get_elements()
+        winners = 0
+
+        for i in elements:
+            winners += int(i["winners"])
+        top = await db.select_top_users(lim_win=winners)
+        for i in top:
+            text += f"🏅{counter}-o'rin    {i[1]} • {i[4]} ball\n"
+            counter += 1
+        if counter:
+            text += f'\n\n<b>✅ Сизда {ball[4]} балл </b>\nкўпроқ дўстларингизни таклиф этиб баллингизни оширинг!'
+            await message.answer(text=text)
     else:
         button = types.InlineKeyboardMarkup(row_width=1, )
         counter = 0
@@ -528,6 +464,7 @@ async def score(message: types.Message):
             counter += 1
             button.add(types.InlineKeyboardButton(f"{counter}-канал", url=f'https://t.me/{i}'))
         button.add(types.InlineKeyboardButton(text="✅ Азо бўлдим", callback_data="check_subs"))
+
 
         await message.answer(f'Танловда иштирок этиш учун қуйидагиларга аъзо бўлинг.'
                              f'Кейин "Аъзо бўлдим" тугмасини босинг',
@@ -537,20 +474,6 @@ async def score(message: types.Message):
 
 @dp.message_handler(text='💡 Шартлар')
 async def help(message: types.Message):
-    elements = await db.get_elements()
-    scoree = 0
-    for element in elements:
-        scoree += element['limit_score']
-
-    try:
-        user = await db.add_userr(telegram_id=message.from_user.id,
-                                  full_name=message.from_user.full_name,
-                                  username=message.from_user.username,
-                                  score=scoree
-                                  )
-    except asyncpg.exceptions.UniqueViolationError:
-        user = await db.select_user(telegram_id=message.from_user.id)
-
     elements = await db.get_elements()
     photo = ''
     shartlar = ''
@@ -579,24 +502,6 @@ async def jsonnn(message: types.Message):
     await bot.send_document(message.from_user.id, document=document)
 
 
-async def jsonn():
-    user_list = []
-    userss = await db.select_all_users()
-    for user in userss:
-        user_dict = {}
-        user_dict['full_name'] = user[1]
-        user_dict['username'] = user[2]
-        user_dict['phone'] = user[3]
-        user_dict['score'] = user[4]
-        user_dict['tg_id'] = user[6]
-        user_list.append(user_dict)
-        await asyncio.sleep(0.05)
-    with open("users.json", "w") as outfile:
-        json.dump(user_list, outfile)
-    document = open('users.json')
-    await bot.send_document(935795577, document=document)
-
-
 @dp.message_handler(text="G'oliblar haqida ma'lumot")
 async def scoree(message: types.Message):
     counter = 1
@@ -617,16 +522,11 @@ async def scoree(message: types.Message):
 
 @dp.message_handler(Command('read_file'))
 async def json_reader(message: types.Message):
-    f = open('data/users.json', 'r')
+    f = open('users.json', 'r')
     data = json.loads(f.read())
     for user in data:
+        print(user['tg_id'])
         try:
-            # if user == 5520107385:
-            #     continue
-            # elif user == 5209276974:
-            #     continue
-            # else:
-            #     await db.delete_users(telegram_id=int(user['tg_id']))
             user = await db.add_json_file_user(
                 telegram_id=user['tg_id'],
                 username=user['username'],
@@ -635,73 +535,5 @@ async def json_reader(message: types.Message):
                 score=user['score']
             )
         except Exception as e:
-            await message.answer(f'{e}')
+            print(e)
     f.close()
-
-
-activee = 0
-blockk = 0
-
-
-async def is_activeee():
-    users = await db.select_all_users()
-    global activee
-    global blockk
-    activee = 0
-    blockk = 0
-    for user in users:
-        user_id = user[3]
-        try:
-            await bot.send_chat_action(chat_id=user_id, action='typing')
-            activee += 1
-            await asyncio.sleep(0.034)
-
-        except Exception as err:
-            blockk += 1
-
-
-@dp.message_handler(text='Test')
-async def user_type(msg: types.Message):
-    users = await db.select_all_users()
-    global activee
-    global blockk
-    activee = 0
-    blockk = 0
-    for user in users:
-        user_id = user[3]
-        try:
-            await bot.send_chat_action(chat_id=user_id, action='typing')
-            activee += 1
-            await asyncio.sleep(0.034)
-
-        except Exception as err:
-            blockk += 1
-
-
-@dp.message_handler(text='Statistika 📊')
-async def show_users(message: types.Message):
-    a = await db.count_users()
-    await message.answer(f'<b>🔷 Jami obunachilar: {a} tа</b>')
-
-
-@dp.message_handler(text='Add_user')
-async def add_user(msg: types.Message):
-    await msg.answer('Kiriting')
-    await Number.add_user.set()
-
-
-@dp.message_handler(state=Number.add_user)
-async def add_userr(msg: types.Message, state: FSMContext):
-    txt = msg.text
-    text = txt.split(',')
-
-    try:
-        user = await db.add_userrr(telegram_id=int(text[0]),
-                                  full_name=text[1],
-                                  username=text[2],
-                                  phone=text[3],
-                                  score=int(text[4])
-                                  )
-    except Exception as err:
-        await msg.answer(f"{err}")
-    await state.finish()

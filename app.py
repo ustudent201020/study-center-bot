@@ -17,11 +17,11 @@ async def on_startup(dispatcher):
 
     await set_default_commands(dispatcher)
 
-    scheduler = AsyncIOScheduler(timezone='Asia/Tashkent')
+    # scheduler = AsyncIOScheduler(timezone='Asia/Tashkent')
 
     # scheduler.add_job(start.send, trigger='interval', seconds=60, kwargs={'bot': Bot})
-    scheduler.add_job(start.jsonn, trigger='interval', days=11)
-    scheduler.start()
+    # scheduler.add_job(start.jsonn, trigger='interval', days=11)
+    # scheduler.start()
 
 
     # Bot ishga tushgani haqida adminga xabar berish
