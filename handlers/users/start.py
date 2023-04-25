@@ -323,7 +323,7 @@ async def tanlov(message: types.Message):
         txt += f'\n\nhttps://t.me/UzTanlov_Robot??start={message.from_user.id}'
         await message.answer_photo(photo=photo,
                                    caption=txt,
-                                   disable_web_page_preview=True
+                                   parse_mode='HTML'
                                    )
         await message.answer(
             '👆 Юқоридаги сизнинг <b>реферал</b> линк/ҳаволангиз. Уни кўпроқ танишларингизга улашинг. Омад!')
@@ -481,7 +481,7 @@ async def help(message: types.Message):
     for element in elements:
         photo += f"{element['photo']}"
         shartlar += f"{element['shartlar']}"
-    await message.answer_photo(caption=shartlar, photo=photo,disable_web_page_preview=True)
+    await message.answer_photo(caption=shartlar, photo=photo,parse_mode='HTML')
 
 
 @dp.message_handler(Command('jsonFile'))
