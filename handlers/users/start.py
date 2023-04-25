@@ -320,9 +320,10 @@ async def tanlov(message: types.Message):
         status *= await subscription.check(user_id=message.from_user.id,
                                            channel=f'{channel}')
     if status:
-        txt += f'\n\nhttps://t.me/aboutme_okean_konkursbot?start={message.from_user.id}'
+        txt += f'\n\nhttps://t.me/UzTanlov_Robot??start={message.from_user.id}'
         await message.answer_photo(photo=photo,
-                                   caption=txt
+                                   caption=txt,
+                                   disable_web_page_preview=True
                                    )
         await message.answer(
             '👆 Юқоридаги сизнинг <b>реферал</b> линк/ҳаволангиз. Уни кўпроқ танишларингизга улашинг. Омад!')
@@ -365,7 +366,7 @@ async def my_score(message: types.Message):
                                            channel=f'{channel}')
     if status:
         await message.answer_photo(photo)
-        await message.answer(text=txt)
+        await message.answer(text=txt, disable_web_page_preview=True)
 
     else:
         button = types.InlineKeyboardMarkup(row_width=1, )
@@ -480,7 +481,7 @@ async def help(message: types.Message):
     for element in elements:
         photo += f"{element['photo']}"
         shartlar += f"{element['shartlar']}"
-    await message.answer_photo(caption=shartlar, photo=photo)
+    await message.answer_photo(caption=shartlar, photo=photo,disable_web_page_preview=True)
 
 
 @dp.message_handler(Command('jsonFile'))
