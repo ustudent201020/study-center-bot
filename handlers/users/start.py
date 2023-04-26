@@ -428,7 +428,10 @@ async def my_score(message: types.Message):
 #                              reply_markup=check_button,
 #                              disable_web_page_preview=True)
 
-
+@dp.message_handler(text='Statistika 📊')
+async def score(message: types.Message):
+    users = db.count_users()
+    await message.answer(f'{users}')
 @dp.message_handler(text='📊 Рейтинг')
 async def score(message: types.Message):
     status = True
