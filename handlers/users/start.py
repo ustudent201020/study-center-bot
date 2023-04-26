@@ -448,7 +448,7 @@ async def score(message: types.Message):
     if status:
         ball = await db.select_user(telegram_id=message.from_user.id)
         counter = 1
-        text = '<b>📊 Ботимизга энг кўп дўстини таклиф қилиб балл тўплаганлар рўйҳати: </b>\n\n'
+        text = '📊 Ботимизга энг кўп дўстини таклиф қилиб балл тўплаганлар рўйҳати: \n\n'
         elements = await db.get_elements()
         winners = 0
 
@@ -459,7 +459,7 @@ async def score(message: types.Message):
             text += f"🏅{counter}-o'rin    {i[1]} • {i[4]} ball\n"
             counter += 1
         if counter:
-            text += f'\n\n<b>✅ Сизда {ball[4]} балл </b>\nкўпроқ дўстларингизни таклиф этиб баллингизни оширинг!'
+            text += f'\n\n✅ Сизда {ball[4]} балл \nкўпроқ дўстларингизни таклиф этиб баллингизни оширинг!'
             await message.answer(text=text, parse_mode='Markdown')
     else:
         button = types.InlineKeyboardMarkup(row_width=1, )
