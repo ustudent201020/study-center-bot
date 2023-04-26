@@ -320,7 +320,7 @@ async def tanlov(message: types.Message):
         status *= await subscription.check(user_id=message.from_user.id,
                                            channel=f'{channel}')
     if status:
-        txt += f'\n\nhttps://t.me/UzTanlov_Robot?start={message.from_user.id}'
+        txt += f'\n\nhttps://t.me/ccscabot?start={message.from_user.id}'
         await message.answer_photo(photo=photo,
                                    caption=txt,
                                    parse_mode='HTML'
@@ -457,7 +457,7 @@ async def score(message: types.Message):
             counter += 1
         if counter:
             text += f'\n\n<b>✅ Сизда {ball[4]} балл </b>\nкўпроқ дўстларингизни таклиф этиб баллингизни оширинг!'
-            await message.answer(text=text)
+            await message.answer(text=text, parse_mode='HTML')
     else:
         button = types.InlineKeyboardMarkup(row_width=1, )
         counter = 0
