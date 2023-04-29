@@ -460,7 +460,7 @@ async def score(message: types.Message):
             counter += 1
         if counter:
             text += f'\n\n✅ Сизда {ball[4]} балл \nкўпроқ дўстларингизни таклиф этиб баллингизни оширинг!'
-            await message.answer(text=text, parse_mode='Markdown')
+            await message.answer(text=text)
     else:
         button = types.InlineKeyboardMarkup(row_width=1, )
         counter = 0
