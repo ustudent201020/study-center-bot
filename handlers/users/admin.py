@@ -37,7 +37,7 @@ async def contumum(msg: types.Message, state: FSMContext):
             count_err = 0
             count = 0
             for user in users:
-                user_id = user[3]
+                user_id = user[6]
                 try:
                     await msg.send_copy(chat_id=user_id)
                     count += 1
