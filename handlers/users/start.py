@@ -11,7 +11,7 @@ from data.config import CHANNELS, ADMINS
 from keyboards.default.all import number, menu
 from keyboards.inline.all import check_button, invite_button
 from loader import bot, dp, db
-from states.rekStates import Number, DelUser, fix
+from states.rekStates import Number, DelUser
 from utils.misc import subscription
 from keyboards.default.all import menu
 from keyboards.default.rekKeyboards import admin_key
@@ -301,12 +301,15 @@ async def phone_number(message: types.Message, state: FSMContext):
 @dp.message_handler(text='fix')
 async def update_scoree(message: types.Message):
     await message.answer('id va balni kiriting')
-    await fix.user.set()
+    await DelUser.fix.set()
 
-@dp.message_handler(state=fix.user)
-async def fix(message: types.Message):
+@dp.message_handler(state=DelUser.fix)
+async def fix(message: types.Message, state:FSMContext):
     user_text = message.text.split(',')
-    await db.update_user_score(score=int(user_text[0]), telegram_id=user_text[1])
+    await db.update_user_score(score=int(user_text[0]), telegram_id=int(user_text[1]))
+    await message.answer('bo`ldi')
+    await state.finish()
+
 @dp.message_handler(text='🎁 ТАНЛОВДА ИШТИРОК ЭТИШ')
 async def tanlov(message: types.Message):
     elements = await db.get_elements()
