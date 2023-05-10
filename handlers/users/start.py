@@ -343,7 +343,7 @@ async def tanlov(message: types.Message):
                                    parse_mode='HTML'
                                    )
         await message.answer(
-            '👆 Юқоридаги сизнинг <b>реферал</b> линк/ҳаволангиз. Уни кўпроқ танишларингизга улашинг. Омад!')
+            '👆 Yuqorida sizning <b>referal</b> link/xavolangiz!')
 
     else:
         button = types.InlineKeyboardMarkup(row_width=1, )
