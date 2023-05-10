@@ -283,9 +283,9 @@ async def phone_number(message: types.Message, state: FSMContext):
                 update_score = int(args_user[4]) + scoree
                 await db.update_user_score(score=update_score, telegram_id=int(args[7]))
                 await bot.send_message(chat_id=int(args[7]),
-                                       text=f"👤 Йанги иштирокчи кушилди\n"
-                                            f"🎗 Сизнинг балингиз {update_score},"
-                                            f" кўпроқ дўстларингизни таклиф этиб баллингизни оширинг!")
+                                       text=f"👤 Yangi ishtirokchi qo`shildi\n"
+                                            f"🎗 Sizning balingiz {update_score},"
+                                            f" ko`proq do`stlaringizni taklif qiling!")
             except Exception as e:
                 pass
             await message.answer(f"<b>🎉 Tabriklaymiz ✅, Siz boshlang`ich {scoree} balga ega bo`ldingiz!</b>",
