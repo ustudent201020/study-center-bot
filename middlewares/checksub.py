@@ -31,7 +31,7 @@
 #             final_status *= status
 #             channel = await bot.get_chat(channel)
 #             if not status:
-#                 result += (f'Танловда иштирок этиш учун қуйидаги 2 каналга аъзо бўлинг. '
+#                 result += (f'Tanlovda ishtirok etish учун қуйидаги 2 каналга аъзо бўлинг. '
 #                            f'Кейин "Аъзо бўлдим" тугмасини босинг')
 #
 #         if not final_status:

@@ -3,15 +3,15 @@ from aiogram.types import ReplyKeyboardMarkup, KeyboardButton
 menu = ReplyKeyboardMarkup(
     keyboard=[
         [
-            KeyboardButton(text='🎁 ТАНЛОВДА ИШТИРОК ЭТИШ'),
+            KeyboardButton(text='🎁 Tanlovda ishtirok etish'),
         ],
         [
-            KeyboardButton(text='🎁 Совғалар'),
-            KeyboardButton(text='👤 Балларим'),
+            KeyboardButton(text='🎁 Sovg`alar'),
+            KeyboardButton(text='👤 Ballarim'),
         ],
         [
             KeyboardButton(text='📊 Рейтинг'),
-            KeyboardButton(text='💡 Шартлар'),
+            KeyboardButton(text='💡 Shartlar'),
         ],
         # [
         #     KeyboardButton(text='📈 Статистика')
@@ -23,7 +23,7 @@ menu = ReplyKeyboardMarkup(
 number = ReplyKeyboardMarkup(
     keyboard=[
         [
-            KeyboardButton(text='📲 Рақамни юбориш', request_contact=True),
+            KeyboardButton(text='📲 Raqamni yuborish', request_contact=True),
         ],
     ],
     resize_keyboard=True
