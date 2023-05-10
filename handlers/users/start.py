@@ -455,7 +455,7 @@ async def my_score(message: types.Message):
 async def show_users(message: types.Message):
     a = await db.count_users()
     await message.answer(f'<b>🔷 Жами обуначилар: {a} та</b>')
-@dp.message_handler(text='📊 Рейтинг')
+@dp.message_handler(text='📊 Reyting')
 async def score(message: types.Message):
     status = True
     all = await db.select_chanel()

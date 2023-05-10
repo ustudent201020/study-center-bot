@@ -10,7 +10,7 @@ menu = ReplyKeyboardMarkup(
             KeyboardButton(text='👤 Ballarim'),
         ],
         [
-            KeyboardButton(text='📊 Рейтинг'),
+            KeyboardButton(text='📊 Reyting'),
             KeyboardButton(text='💡 Shartlar'),
         ],
         # [
