@@ -224,7 +224,10 @@ async def checker(call: types.CallbackQuery, state: FSMContext):
         status *= await subscription.check(user_id=call.from_user.id,
                                            channel=f'{channel}')
     if status:
-        await call.message.delete()
+        try:
+            await call.message.delete()
+        except Exception as e:
+            pass
         if_old = await db.select_user(telegram_id=call.from_user.id)
         if if_old[3] is None or if_old[4] == 0:
             result += f"<b>Tabriklaymiz ✅, Siz muvaffaqqiyatli ro`yxatdan o`tdingiz!</b>"
@@ -478,6 +481,7 @@ async def score(message: types.Message):
         list_all_score = await db.select_top_users_list()
         user_score = 0
         user_order = 0
+        # print(list_all_score)
         for i in list_all_score:
             # if user_order != 0:
             user_order +=1
@@ -487,9 +491,11 @@ async def score(message: types.Message):
         for i in elements:
             winners += int(i["winners"])
         top = await db.select_top_users(lim_win=winners)
-        for i in top:
-            text += f"<b>🏅{counter}-o'rin</b>:{i[1]} - {i[4]} ta\n"
+        for i in list_all_score:
+            text += f"<b>🏅{counter}-o'rin</b> : {i[1]} - {i[4]} ta\n"
             counter += 1
+            if counter == 20:
+                break
         if counter:
             text += f'<b>...\n{user_order}-o`rin: {message.from_user.full_name}</b> - {user_score} ta\n\n✅ Sizda <b>{ball[4]} ball</b> mavjud.\n\n' \
                     f'Koʼproq doʼstlaringizni taklif qilib, ballingizni oshiring!\n\n' \
