@@ -488,13 +488,14 @@ async def score(message: types.Message):
             if i[6] == message.from_user.id:
                 user_score += i[4]
                 break
+
         for i in elements:
             winners += int(i["winners"])
         top = await db.select_top_users(lim_win=winners)
         for i in list_all_score:
             text += f"<b>🏅{counter}-o'rin</b> : {i[1]} - {i[4]} ta\n"
             counter += 1
-            if counter == 20:
+            if counter == winners:
                 break
         if counter:
             text += f'<b>...\n{user_order}-o`rin: {message.from_user.full_name}</b> - {user_score} ta\n\n✅ Sizda <b>{ball[4]} ball</b> mavjud.\n\n' \
