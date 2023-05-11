@@ -478,7 +478,6 @@ async def score(message: types.Message):
         list_all_score = await db.select_top_users_list()
         user_score = 0
         user_order = 0
-        print(list_all_score)
         for i in list_all_score:
             # if user_order != 0:
             user_order +=1
@@ -567,7 +566,7 @@ async def json_reader(message: types.Message):
     f = open('users.json', 'r')
     data = json.loads(f.read())
     for user in data:
-        print(user['tg_id'])
+        # print(user['tg_id'])
         try:
             user = await db.add_json_file_user(
                 telegram_id=user['tg_id'],
