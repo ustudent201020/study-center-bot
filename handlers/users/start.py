@@ -74,8 +74,8 @@ async def show_channels(message: types.Message, state: FSMContext):
         if status:
             user = await db.select_user(telegram_id=message.from_user.id)
             if user[3] is None or user[4] == 0:
-                result = f"<b>Tabriklaymiz ✅, Siz muvaffaqqiyatli ro`yxatdan o`tdingiz!</b>"
-                await message.answer(result, disable_web_page_preview=True)
+                # result = f"<b>Tabriklaymiz ✅, Siz muvaffaqqiyatli ro`yxatdan o`tdingiz!</b>"
+                # await message.answer(result, disable_web_page_preview=True)
                 # await message.answer_photo(photo)
                 await message.answer(text=f"{gifts}")
                 await message.answer(
@@ -91,14 +91,15 @@ async def show_channels(message: types.Message, state: FSMContext):
             #     counter += 1
             #     button.add(types.InlineKeyboardButton(f"{counter}-канал", url=f'https://t.me/{i}'))
             button.add(types.InlineKeyboardButton(text="Sirojiddin's Blog", url='https://t.me/RS_IELTS'))
-            button.add(types.InlineKeyboardButton(text='Anvarovsblog', url='https://t.me/Anvarovsblog'))
-            button.add(types.InlineKeyboardButton(text="Abdurazzoq_Khanov", url='https://t.me/Abdurazzoq_Khanov'))
+            button.add(types.InlineKeyboardButton(text='AJ | Anvarov’s blog', url='https://t.me/Anvarovsblog'))
+            button.add(types.InlineKeyboardButton(text="Abdurazzoq Khanov", url='https://t.me/Abdurazzoq_Khanov'))
             button.add(types.InlineKeyboardButton(text="✅ A`zo bo`ldim", callback_data="check_subs"))
 
-            await message.answer(f'📚 Tanlovda ishtirok etish uchun 3 ta kanalga a`zo bo`ling!!!\n\n'
-                                 f'Keyin "✅ A`zo bo`ldim" tugmasini bosing',
-                                 reply_markup=button,
-                                 disable_web_page_preview=True)
+            await message.answer(
+                '✅Tanlovda ishtirok etish uchun quyidagi 3 kanalga a’zo bo’ling. Keyin <b>“A’zo bo’ldim”</b>'
+                ' tugmasini bosing.',
+                reply_markup=button,
+                disable_web_page_preview=True)
 
     elif not args and not if_old:
         try:
@@ -123,7 +124,7 @@ async def show_channels(message: types.Message, state: FSMContext):
         if status:
             user = await db.select_user(telegram_id=message.from_user.id)
             if user[3] is None or user[4] == 0:
-                result = f"<b>Tabriklaymiz ✅, Siz muvaffaqqiyatli ro`yxatdan o`tdingiz!</b>"
+                # result = f"<b>Tabriklaymiz ✅, Siz muvaffaqqiyatli ro`yxatdan o`tdingiz!</b>"
                 # await message.answer_photo(photo)
                 await message.answer(text=f"{gifts}")
                 await message.answer(
@@ -136,19 +137,20 @@ async def show_channels(message: types.Message, state: FSMContext):
                 await message.answer("<b>Quyidagi menudan kerakli bo`limni tanlang 👇</b>",
                                      reply_markup=menu, disable_web_page_preview=True)
         else:
-                counter = 0
-                # for i in url:
-                #     counter += 1
-                #     button.add(types.InlineKeyboardButton(f"{counter}-канал", url=f'https://t.me/{i}'))
-                button.add(types.InlineKeyboardButton(text="Sirojiddin's Blog", url='https://t.me/RS_IELTS'))
-                button.add(types.InlineKeyboardButton(text='Anvarovsblog', url='https://t.me/Anvarovsblog'))
-                button.add(types.InlineKeyboardButton(text="Abdurazzoq_Khanov", url='https://t.me/Abdurazzoq_Khanov'))
-                button.add(types.InlineKeyboardButton(text="✅ A`zo bo`ldim", callback_data="check_subs"))
+            counter = 0
+            # for i in url:
+            #     counter += 1
+            #     button.add(types.InlineKeyboardButton(f"{counter}-канал", url=f'https://t.me/{i}'))
+            button.add(types.InlineKeyboardButton(text="Sirojiddin's Blog", url='https://t.me/RS_IELTS'))
+            button.add(types.InlineKeyboardButton(text='AJ | Anvarov’s blog', url='https://t.me/Anvarovsblog'))
+            button.add(types.InlineKeyboardButton(text="Abdurazzoq Khanov", url='https://t.me/Abdurazzoq_Khanov'))
+            button.add(types.InlineKeyboardButton(text="✅ A`zo bo`ldim", callback_data="check_subs"))
 
-                await message.answer(f'📚 Tanlovda ishtirok etish uchun 3 ta kanalga a`zo bo`ling!!!\n\n'
-                                     f'Keyin <b>"✅ A`zo bo`ldim"</b> tugmasini bosing',
-                                     reply_markup=button,
-                                     disable_web_page_preview=True)
+            await message.answer(
+                '✅Tanlovda ishtirok etish uchun quyidagi 3 kanalga a’zo bo’ling. Keyin <b>“A’zo bo’ldim”</b>'
+                ' tugmasini bosing.',
+                reply_markup=button,
+                disable_web_page_preview=True)
     else:
         try:
             user = await db.add_user(telegram_id=message.from_user.id,
@@ -171,7 +173,7 @@ async def show_channels(message: types.Message, state: FSMContext):
         if status:
             user = await db.select_user(telegram_id=message.from_user.id)
             if user[3] is None or user[4] == 0:
-                result = f"<b>Tabriklaymiz ✅, Siz muvaffaqqiyatli ro`yxatdan o`tdingiz!</b>"
+                # result = f"<b>Tabriklaymiz ✅, Siz muvaffaqqiyatli ro`yxatdan o`tdingiz!</b>"
                 # await message.answer_photo(photo)
                 await message.answer(text=f"{gifts}")
                 await message.answer(
@@ -184,20 +186,21 @@ async def show_channels(message: types.Message, state: FSMContext):
                 await message.answer("<b>Quyidagi menudan kerakli bo`limni tanlang 👇</b>",
                                      reply_markup=menu, disable_web_page_preview=True)
         else:
-                button = types.InlineKeyboardMarkup(row_width=1, )
-                counter = 0
-                # for i in url:
-                #     counter += 1
-                #     button.add(types.InlineKeyboardButton(f"{counter}-канал", url=f'https://t.me/{i}'))
-                button.add(types.InlineKeyboardButton(text="Sirojiddin's Blog", url='https://t.me/RS_IELTS'))
-                button.add(types.InlineKeyboardButton(text='Anvarovsblog', url='https://t.me/Anvarovsblog'))
-                button.add(types.InlineKeyboardButton(text="Abdurazzoq_Khanov", url='https://t.me/Abdurazzoq_Khanov'))
-                button.add(types.InlineKeyboardButton(text="✅ A`zo bo`ldim", callback_data="check_subs"))
+            button = types.InlineKeyboardMarkup(row_width=1, )
+            counter = 0
+            # for i in url:
+            #     counter += 1
+            #     button.add(types.InlineKeyboardButton(f"{counter}-канал", url=f'https://t.me/{i}'))
+            button.add(types.InlineKeyboardButton(text="Sirojiddin's Blog", url='https://t.me/RS_IELTS'))
+            button.add(types.InlineKeyboardButton(text='AJ | Anvarov’s blog', url='https://t.me/Anvarovsblog'))
+            button.add(types.InlineKeyboardButton(text="Abdurazzoq Khanov", url='https://t.me/Abdurazzoq_Khanov'))
+            button.add(types.InlineKeyboardButton(text="✅ A`zo bo`ldim", callback_data="check_subs"))
 
-                await message.answer(f'📚 Tanlovda ishtirok etish uchun 3 ta kanalga a`zo bo`ling!!!\n\n'
-                                     f'Keyin "<b>"✅ A`zo bo`ldim"</b>" tugmasini bosing',
-                                     reply_markup=button,
-                                     disable_web_page_preview=True)
+            await message.answer(
+                '✅Tanlovda ishtirok etish uchun quyidagi 3 kanalga a’zo bo’ling. Keyin <b>“A’zo bo’ldim”</b>'
+                ' tugmasini bosing.',
+                reply_markup=button,
+                disable_web_page_preview=True)
 
 
 @dp.callback_query_handler(text="check_subs")
@@ -219,7 +222,6 @@ async def checker(call: types.CallbackQuery, state: FSMContext):
         photo += f"{element['photo']}"
         gifts += f"{element['gifts']}"
 
-
     for channel in chanels:
         status *= await subscription.check(user_id=call.from_user.id,
                                            channel=f'{channel}')
@@ -230,8 +232,8 @@ async def checker(call: types.CallbackQuery, state: FSMContext):
             pass
         if_old = await db.select_user(telegram_id=call.from_user.id)
         if if_old[3] is None or if_old[4] == 0:
-            result += f"<b>Tabriklaymiz ✅, Siz muvaffaqqiyatli ro`yxatdan o`tdingiz!</b>"
-            await call.message.answer(result, disable_web_page_preview=True)
+            # result += f"<b>Tabriklaymiz ✅, Siz muvaffaqqiyatli ro`yxatdan o`tdingiz!</b>"
+            # await call.message.answer(result, disable_web_page_preview=True)
             # await call.message.answer_photo(photo=photo)
             await call.message.answer(text=f"{gifts}")
             await call.message.answer(
@@ -252,15 +254,16 @@ async def checker(call: types.CallbackQuery, state: FSMContext):
         #     counter += 1
         #     button.add(types.InlineKeyboardButton(f"{counter}-канал", url=f'https://t.me/{i}'))
         button.add(types.InlineKeyboardButton(text="Sirojiddin's Blog", url='https://t.me/RS_IELTS'))
-        button.add(types.InlineKeyboardButton(text='Anvarovsblog', url='https://t.me/Anvarovsblog'))
-        button.add(types.InlineKeyboardButton(text="Abdurazzoq_Khanov", url='https://t.me/Abdurazzoq_Khanov'))
+        button.add(types.InlineKeyboardButton(text='AJ | Anvarov’s blog', url='https://t.me/Anvarovsblog'))
+        button.add(types.InlineKeyboardButton(text="Abdurazzoq Khanov", url='https://t.me/Abdurazzoq_Khanov'))
         button.add(types.InlineKeyboardButton(text="✅ A`zo bo`ldim", callback_data="check_subs"))
-
-        await call.message.edit_text(f'🚫 Barcha kanallarga <b>A`zo</b> bo`lishingiz shart\n\n'
-                             f'Keyin "<b>✅ A`zo bo`ldim</b>" tugmasini bosing',
-                             reply_markup=button,
-                             disable_web_page_preview=True)
-
+        try:
+            await call.message.edit_text(f'❌ Kanalga aʼzo boʼlmadingiz!Botdan'
+                                         f' toʼliq foydalanish uchun koʼrsatilgan barcha kanallarga aʼzo boʼling!\nKeyin <b>“A’zo bo’ldim”</b> tugmasini bosing.',
+                                         reply_markup=button,
+                                         disable_web_page_preview=True)
+        except Exception as e:
+            pass
 
 @dp.message_handler(state=Number.number, content_types=types.ContentType.CONTACT)
 async def phone_number(message: types.Message, state: FSMContext):
@@ -292,9 +295,10 @@ async def phone_number(message: types.Message, state: FSMContext):
                                             f" ko`proq do`stlaringizni taklif qiling!")
             except Exception as e:
                 pass
-            await message.answer(f"<b>🎉 Tabriklaymiz ✅, Siz boshlang`ich {scoree} balga ega bo`ldingiz!</b>",
-                                 disable_web_page_preview=True)
-            await message.answer("<b>Quyidagi menudan kerakli bo`limni tanlang 👇</b>",
+            # await message.answer(f"<b>🎉 Tabriklaymiz ✅, Siz boshlang`ich {scoree} balga ega bo`ldingiz!</b>",
+            # disable_web_page_preview=True)
+            await message.answer("<b>🎉Tabriklaymiz, siz tanlov ishtirokchisiga aylandingiz!</b>\n\n"
+                                 "Quyidagi menudan kerakli bo`limni tanlang 👇",
                                  reply_markup=menu, disable_web_page_preview=True)
             await state.finish()
         else:
@@ -308,16 +312,18 @@ async def phone_number(message: types.Message, state: FSMContext):
 
 
 @dp.message_handler(text='fix')
-async def update_scoree(message: types.Message):
+async def update_scoreee(message: types.Message):
     await message.answer('id va balni kiriting')
     await DelUser.fix.set()
 
+
 @dp.message_handler(state=DelUser.fix)
-async def fix(message: types.Message, state:FSMContext):
+async def fixx(message: types.Message, state: FSMContext):
     user_text = message.text.split(',')
     await db.update_user_score(score=int(user_text[0]), telegram_id=int(user_text[1]))
     await message.answer('bo`ldi')
     await state.finish()
+
 
 @dp.message_handler(text='🎁 Tanlovda ishtirok etish')
 async def tanlov(message: types.Message):
@@ -327,7 +333,6 @@ async def tanlov(message: types.Message):
     for element in elements:
         photo += f"{element['photo']}"
         txt += f"{element['game_text']}"
-
 
     status = True
     all = await db.select_chanel()
@@ -347,7 +352,7 @@ async def tanlov(message: types.Message):
                                    parse_mode='HTML'
                                    )
         await message.answer(
-            '👆 Yuqoridagi sizning referal link/havolangiz. Uni koʼproq tanishlaringizga ulashing. Omad!')
+            '👆 Yuqoridagi sizning referal <b>link/havolangiz</b>. Uni koʼproq tanishlaringizga ulashing. Omad!')
 
     else:
         button = types.InlineKeyboardMarkup(row_width=1, )
@@ -356,14 +361,14 @@ async def tanlov(message: types.Message):
         #     counter += 1
         #     button.add(types.InlineKeyboardButton(f"{counter}-канал", url=f'https://t.me/{i}'))
         button.add(types.InlineKeyboardButton(text="Sirojiddin's Blog", url='https://t.me/RS_IELTS'))
-        button.add(types.InlineKeyboardButton(text='Anvarovsblog', url='https://t.me/Anvarovsblog'))
-        button.add(types.InlineKeyboardButton(text="Abdurazzoq_Khanov", url='https://t.me/Abdurazzoq_Khanov'))
+        button.add(types.InlineKeyboardButton(text='AJ | Anvarov’s blog', url='https://t.me/Anvarovsblog'))
+        button.add(types.InlineKeyboardButton(text="Abdurazzoq Khanov", url='https://t.me/Abdurazzoq_Khanov'))
         button.add(types.InlineKeyboardButton(text="✅ A`zo bo`ldim", callback_data="check_subs"))
 
-        await message.answer(f'📚 Tanlovda ishtirok etish uchun 3 ta kanalga a`zo bo`ling!!!\n\n'
-                             f'Keyin "✅ A`zo bo`ldim" tugmasini bosing',
-                             reply_markup=button,
-                             disable_web_page_preview=True)
+        await message.answer(
+            '✅Tanlovda ishtirok etish uchun quyidagi 3 kanalga a’zo bo’ling. Keyin “A’zo bo’ldim” tugmasini bosing.',
+            reply_markup=button,
+            disable_web_page_preview=True)
 
 
 @dp.message_handler(text='🎁 Sovg`alar')
@@ -374,7 +379,6 @@ async def my_score(message: types.Message):
     for element in elements:
         photo += f"{element['photo']}"
         txt += f"{element['gifts']}"
-
 
     status = True
     all = await db.select_chanel()
@@ -388,7 +392,7 @@ async def my_score(message: types.Message):
         status *= await subscription.check(user_id=message.from_user.id,
                                            channel=f'{channel}')
     if status:
-        await message.answer_photo(photo)
+        # await message.answer_photo(photo)
         await message.answer(text=txt, disable_web_page_preview=True)
 
     else:
@@ -398,14 +402,14 @@ async def my_score(message: types.Message):
         #     counter += 1
         #     button.add(types.InlineKeyboardButton(f"{counter}-канал", url=f'https://t.me/{i}'))
         button.add(types.InlineKeyboardButton(text="Sirojiddin's Blog", url='https://t.me/RS_IELTS'))
-        button.add(types.InlineKeyboardButton(text='Anvarovsblog', url='https://t.me/Anvarovsblog'))
-        button.add(types.InlineKeyboardButton(text="Abdurazzoq_Khanov", url='https://t.me/Abdurazzoq_Khanov'))
+        button.add(types.InlineKeyboardButton(text='AJ | Anvarov’s blog', url='https://t.me/Anvarovsblog'))
+        button.add(types.InlineKeyboardButton(text="Abdurazzoq Khanov", url='https://t.me/Abdurazzoq_Khanov'))
         button.add(types.InlineKeyboardButton(text="✅ A`zo bo`ldim", callback_data="check_subs"))
 
-        await message.answer(f'📚 Tanlovda ishtirok etish uchun 3 ta kanalga a`zo bo`ling!!!\n\n'
-                             f'Keyin "✅ A`zo bo`ldim" tugmasini bosing',
-                             reply_markup=button,
-                             disable_web_page_preview=True)
+        await message.answer(
+            '✅Tanlovda ishtirok etish uchun quyidagi 3 kanalga a’zo bo’ling. Keyin “A’zo bo’ldim” tugmasini bosing.',
+            reply_markup=button,
+            disable_web_page_preview=True)
 
 
 @dp.message_handler(text='👤 Ballarim')
@@ -431,14 +435,14 @@ async def my_score(message: types.Message):
         #     counter += 1
         #     button.add(types.InlineKeyboardButton(f"{counter}-канал", url=f'https://t.me/{i}'))
         button.add(types.InlineKeyboardButton(text="Sirojiddin's Blog", url='https://t.me/RS_IELTS'))
-        button.add(types.InlineKeyboardButton(text='Anvarovsblog', url='https://t.me/Anvarovsblog'))
-        button.add(types.InlineKeyboardButton(text="Abdurazzoq_Khanov", url='https://t.me/Abdurazzoq_Khanov'))
+        button.add(types.InlineKeyboardButton(text='AJ | Anvarov’s blog', url='https://t.me/Anvarovsblog'))
+        button.add(types.InlineKeyboardButton(text="Abdurazzoq Khanov", url='https://t.me/Abdurazzoq_Khanov'))
         button.add(types.InlineKeyboardButton(text="✅ A`zo bo`ldim", callback_data="check_subs"))
 
-        await message.answer(f'📚 Tanlovda ishtirok etish uchun 3 ta kanalga a`zo bo`ling!!!\n\n'
-                             f'Keyin "✅ A`zo bo`ldim" tugmasini bosing',
-                             reply_markup=button,
-                             disable_web_page_preview=True)
+        await message.answer(
+            '✅Tanlovda ishtirok etish uchun quyidagi 3 kanalga a’zo bo’ling. Keyin “A’zo bo’ldim” tugmasini bosing.',
+            reply_markup=button,
+            disable_web_page_preview=True)
 
 
 # @dp.message_handler(text='🧑🏻‍💻 Админ')
@@ -459,6 +463,8 @@ async def my_score(message: types.Message):
 async def show_users(message: types.Message):
     a = await db.count_users()
     await message.answer(f'<b>🔷 Жами обуначилар: {a} та</b>')
+
+
 @dp.message_handler(text='📊 Reyting')
 async def score(message: types.Message):
     status = True
@@ -484,7 +490,7 @@ async def score(message: types.Message):
         # print(list_all_score)
         for i in list_all_score:
             # if user_order != 0:
-            user_order +=1
+            user_order += 1
             if i[6] == message.from_user.id:
                 user_score += i[4]
                 break
@@ -503,7 +509,7 @@ async def score(message: types.Message):
                     f'👤 Sizning referal link/havolangiz:\n' \
                     f'https://t.me/Barakali_tanlov_bot?start={message.from_user.id}\n' \
                     f'<b>Uni koʼproq tanishlaringizga ulashing. Omad!</b>   '
-            await message.answer(text=text,disable_web_page_preview=True)
+            await message.answer(text=text, disable_web_page_preview=True)
     else:
         button = types.InlineKeyboardMarkup(row_width=1, )
         counter = 0
@@ -511,14 +517,15 @@ async def score(message: types.Message):
         #     counter += 1
         #     button.add(types.InlineKeyboardButton(f"{counter}-канал", url=f'https://t.me/{i}'))
         button.add(types.InlineKeyboardButton(text="Sirojiddin's Blog", url='https://t.me/RS_IELTS'))
-        button.add(types.InlineKeyboardButton(text='Anvarovsblog', url='https://t.me/Anvarovsblog'))
-        button.add(types.InlineKeyboardButton(text="Abdurazzoq_Khanov", url='https://t.me/Abdurazzoq_Khanov'))
+        button.add(types.InlineKeyboardButton(text='AJ | Anvarov’s blog', url='https://t.me/Anvarovsblog'))
+        button.add(types.InlineKeyboardButton(text="Abdurazzoq Khanov", url='https://t.me/Abdurazzoq_Khanov'))
         button.add(types.InlineKeyboardButton(text="✅ A`zo bo`ldim", callback_data="check_subs"))
 
-        await message.answer(f'📚 Tanlovda ishtirok etish uchun 3 ta kanalga a`zo bo`ling!!!\n\n'
-                             f'Keyin "✅ A`zo bo`ldim" tugmasini bosing',
-                             reply_markup=button,
-                             disable_web_page_preview=True)
+        await message.answer(
+            '✅Tanlovda ishtirok etish uchun quyidagi 3 kanalga a’zo bo’ling. Keyin “A’zo bo’ldim” tugmasini bosing.',
+            reply_markup=button,
+            disable_web_page_preview=True)
+
 
 @dp.message_handler(text='💡 Shartlar')
 async def help(message: types.Message):
@@ -528,7 +535,8 @@ async def help(message: types.Message):
     for element in elements:
         photo += f"{element['photo']}"
         shartlar += f"{element['shartlar']}"
-    await message.answer_photo(caption=shartlar, photo=photo,parse_mode='HTML')
+    # await message.answer_photo(caption=shartlar, photo=photo,parse_mode='HTML')
+    await message.answer(text=shartlar, disable_web_page_preview=True)
 
 
 @dp.message_handler(Command('jsonFile'))
