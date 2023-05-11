@@ -124,7 +124,7 @@ async def show_channels(message: types.Message, state: FSMContext):
             user = await db.select_user(telegram_id=message.from_user.id)
             if user[3] is None or user[4] == 0:
                 result = f"<b>Tabriklaymiz ✅, Siz muvaffaqqiyatli ro`yxatdan o`tdingiz!</b>"
-                await message.answer_photo(photo)
+                # await message.answer_photo(photo)
                 await message.answer(text=f"{gifts}")
                 await message.answer(
                     '<b>📲 Raqamni yuborish" tugmasini bosgan holda raqamingizni yuboring!</b>',
@@ -146,7 +146,7 @@ async def show_channels(message: types.Message, state: FSMContext):
                 button.add(types.InlineKeyboardButton(text="✅ A`zo bo`ldim", callback_data="check_subs"))
 
                 await message.answer(f'📚 Tanlovda ishtirok etish uchun 3 ta kanalga a`zo bo`ling!!!\n\n'
-                                     f'Keyin "✅ A`zo bo`ldim" tugmasini bosing',
+                                     f'Keyin <b>"✅ A`zo bo`ldim"</b> tugmasini bosing',
                                      reply_markup=button,
                                      disable_web_page_preview=True)
     else:
@@ -172,7 +172,7 @@ async def show_channels(message: types.Message, state: FSMContext):
             user = await db.select_user(telegram_id=message.from_user.id)
             if user[3] is None or user[4] == 0:
                 result = f"<b>Tabriklaymiz ✅, Siz muvaffaqqiyatli ro`yxatdan o`tdingiz!</b>"
-                await message.answer_photo(photo)
+                # await message.answer_photo(photo)
                 await message.answer(text=f"{gifts}")
                 await message.answer(
                     '<b>📲 Raqamni yuborish" tugmasini bosgan holda raqamingizni yuboring!</b>',
@@ -195,14 +195,14 @@ async def show_channels(message: types.Message, state: FSMContext):
                 button.add(types.InlineKeyboardButton(text="✅ A`zo bo`ldim", callback_data="check_subs"))
 
                 await message.answer(f'📚 Tanlovda ishtirok etish uchun 3 ta kanalga a`zo bo`ling!!!\n\n'
-                                     f'Keyin "✅ A`zo bo`ldim" tugmasini bosing',
+                                     f'Keyin "<b>"✅ A`zo bo`ldim"</b>" tugmasini bosing',
                                      reply_markup=button,
                                      disable_web_page_preview=True)
 
 
 @dp.callback_query_handler(text="check_subs")
 async def checker(call: types.CallbackQuery, state: FSMContext):
-    await call.answer()
+    # await call.answer()
     result = str()
     result2 = str()
     status = True
@@ -224,11 +224,12 @@ async def checker(call: types.CallbackQuery, state: FSMContext):
         status *= await subscription.check(user_id=call.from_user.id,
                                            channel=f'{channel}')
     if status:
+        await call.message.delete()
         if_old = await db.select_user(telegram_id=call.from_user.id)
         if if_old[3] is None or if_old[4] == 0:
             result += f"<b>Tabriklaymiz ✅, Siz muvaffaqqiyatli ro`yxatdan o`tdingiz!</b>"
             await call.message.answer(result, disable_web_page_preview=True)
-            await call.message.answer_photo(photo=photo)
+            # await call.message.answer_photo(photo=photo)
             await call.message.answer(text=f"{gifts}")
             await call.message.answer(
                 '<b>📲 Raqamni yuborish" tugmasini bosgan holda raqamingizni yuboring!</b>',
@@ -252,8 +253,8 @@ async def checker(call: types.CallbackQuery, state: FSMContext):
         button.add(types.InlineKeyboardButton(text="Abdurazzoq_Khanov", url='https://t.me/Abdurazzoq_Khanov'))
         button.add(types.InlineKeyboardButton(text="✅ A`zo bo`ldim", callback_data="check_subs"))
 
-        await message.answer(f'📚 Tanlovda ishtirok etish uchun 3 ta kanalga a`zo bo`ling!!!\n\n'
-                             f'Keyin "✅ A`zo bo`ldim" tugmasini bosing',
+        await call.message.edit_text(f'🚫 Barcha kanallarga <b>A`zo</b> bo`lishingiz shart\n\n'
+                             f'Keyin "<b>✅ A`zo bo`ldim</b>" tugmasini bosing',
                              reply_markup=button,
                              disable_web_page_preview=True)
 
@@ -343,7 +344,7 @@ async def tanlov(message: types.Message):
                                    parse_mode='HTML'
                                    )
         await message.answer(
-            '👆 Yuqorida sizning <b>referal</b> link/xavolangiz!')
+            '👆 Yuqoridagi sizning referal link/havolangiz. Uni koʼproq tanishlaringizga ulashing. Omad!')
 
     else:
         button = types.InlineKeyboardMarkup(row_width=1, )
@@ -419,7 +420,7 @@ async def my_score(message: types.Message):
                                            channel=f'{channel}')
     if status:
         score = await db.select_user(telegram_id=message.from_user.id)
-        await message.answer(f'<b>Sizda {score[4]} - ball mavjud</b>')
+        await message.answer(f'📌Sizda {score[4]} ball mavjud.')
     else:
         button = types.InlineKeyboardMarkup(row_width=1, )
         counter = 0
@@ -471,19 +472,32 @@ async def score(message: types.Message):
     if status:
         ball = await db.select_user(telegram_id=message.from_user.id)
         counter = 1
-        text = '📊 Botimizda eng ko`p do`stini taklif qilib bal to`plagalar ro`yxati: \n\n'
+        text = '<b>📊 Tanlovimizda eng koʼp doʼstini taklif qilib, yuqori ball toʼplaganlar reytingi:</b>\n\n'
         elements = await db.get_elements()
         winners = 0
-
+        list_all_score = await db.select_top_users_list()
+        user_score = 0
+        user_order = 0
+        print(list_all_score)
+        for i in list_all_score:
+            # if user_order != 0:
+            user_order +=1
+            if i[6] == message.from_user.id:
+                user_score += i[4]
+                break
         for i in elements:
             winners += int(i["winners"])
         top = await db.select_top_users(lim_win=winners)
         for i in top:
-            text += f"🏅{counter}-o'rin    {i[1]} • {i[4]} ball\n"
+            text += f"<b>🏅{counter}-o'rin</b>:{i[1]} - {i[4]} ta\n"
             counter += 1
         if counter:
-            text += f'\n\n✅ Sizda {ball[4]} ball \nko`proq do`stingizni taklif qilib balingizni oshiring!'
-            await message.answer(text=text)
+            text += f'<b>...\n{user_order}-o`rin: {message.from_user.full_name}</b> - {user_score} ta\n\n✅ Sizda <b>{ball[4]} ball</b> mavjud.\n\n' \
+                    f'Koʼproq doʼstlaringizni taklif qilib, ballingizni oshiring!\n\n' \
+                    f'👤 Sizning referal link/havolangiz:\n' \
+                    f'https://t.me/Barakali_tanlov_bot?start={message.from_user.id}\n' \
+                    f'<b>Uni koʼproq tanishlaringizga ulashing. Omad!</b>   '
+            await message.answer(text=text,disable_web_page_preview=True)
     else:
         button = types.InlineKeyboardMarkup(row_width=1, )
         counter = 0

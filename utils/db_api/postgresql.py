@@ -119,6 +119,10 @@ class Database:
         sql = f"SELECT * FROM Users WHERE score IS NOT NULL ORDER BY score DESC LIMIT {lim_win}"
         return await self.execute(sql, fetch=True)
 
+    async def select_top_users_list(self):
+        sql = f"SELECT * FROM Users WHERE score IS NOT NULL ORDER BY score DESC"
+        return await self.execute(sql, fetch=True)
+
     async def count_users(self):
         sql = "SELECT COUNT(*) FROM Users"
         return await self.execute(sql, fetchval=True)
