@@ -477,7 +477,7 @@ async def score(message: types.Message):
         counter = 1
         text = '<b>📊 Tanlovimizda eng koʼp doʼstini taklif qilib, yuqori ball toʼplaganlar reytingi:</b>\n\n'
         elements = await db.get_elements()
-        winners = 0
+        winners = 1
         list_all_score = await db.select_top_users_list()
         user_score = 0
         user_order = 0
