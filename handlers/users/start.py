@@ -79,7 +79,7 @@ async def show_channels(message: types.Message, state: FSMContext):
                 # await message.answer_photo(photo)
                 await message.answer(text=f"{gifts}")
                 await message.answer(
-                    '<b>📲 Raqamni yuborish" tugmasini bosgan holda raqamingizni yuboring!</b>',
+                    '<b>📲 Raqamni yuborish"</b> tugmasini bosgan holda raqamingizni yuboring!',
                     reply_markup=number,
                     disable_web_page_preview=True
                 )
