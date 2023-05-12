@@ -3,6 +3,7 @@ from aiogram.dispatcher.filters.state import StatesGroup, State
 
 class RekData(StatesGroup):
     choice = State()
+    special = State()
     picture = State()
     score = State()
     text = State()

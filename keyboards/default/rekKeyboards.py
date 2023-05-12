@@ -26,8 +26,12 @@ back = ReplyKeyboardMarkup(
 admin_key = ReplyKeyboardMarkup(
     keyboard=[
         [
-            KeyboardButton(text='Xabar Yuborish 🗒 '),
-            # KeyboardButton(text='Hisoblash uchun balni kiritish')
+            KeyboardButton(text='Mahsus Xabarni Yuborish 🗒'),
+            KeyboardButton(text='Excel File'),
+        ],
+        [
+            KeyboardButton(text='Barchaga Xabar Yuborish 🗒'),
+            KeyboardButton(text='Bugungi balni kiriting'),
         ],
         [
             KeyboardButton(text='Kanal ➕'),
@@ -50,7 +54,7 @@ admin_key = ReplyKeyboardMarkup(
             KeyboardButton(text='Shartlarni qo"shish 🖼')
         ],
         [
-            KeyboardButton(text="G'oliblar sonini kirting"),
+            # KeyboardButton(text="Bugungi balni kiriting"),
             KeyboardButton(text="G'oliblar haqida ma'lumot")
         ],
         [

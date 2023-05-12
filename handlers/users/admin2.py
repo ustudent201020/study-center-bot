@@ -289,7 +289,7 @@ async def shartlarr(message: types.Message, state: FSMContext):
         await message.answer('Faqat text qabul qilamiz')
 
 
-@dp.message_handler(text="G'oliblar sonini kirting")
+@dp.message_handler(text="Bugungi balni kiriting")
 async def change_picture(message: types.Message):
     await message.answer('Faqat son kiriting', reply_markup=back)
     await RekData.winners.set()

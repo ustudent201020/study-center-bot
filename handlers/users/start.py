@@ -1,11 +1,15 @@
 import asyncio
 import json
-
+import random
+import string
+import os
 import asyncpg
 from aiogram import types
-from aiogram.types import ParseMode
+from aiogram.types import ParseMode,InputFile
 from aiogram.dispatcher import FSMContext
 from aiogram.dispatcher.filters import Command, CommandStart
+from openpyxl import Workbook
+
 
 from data.config import CHANNELS, ADMINS
 from keyboards.default.all import number, menu
@@ -483,7 +487,7 @@ async def score(message: types.Message):
         counter = 1
         text = '<b>📊 Tanlovimizda eng koʼp doʼstini taklif qilib, yuqori ball toʼplaganlar reytingi:</b>\n\n'
         elements = await db.get_elements()
-        winners = 1
+        winners = 21
         list_all_score = await db.select_top_users_list()
         user_score = 0
         user_order = 0
@@ -495,9 +499,9 @@ async def score(message: types.Message):
                 user_score += i[4]
                 break
 
-        for i in elements:
-            winners += int(i["winners"])
-        top = await db.select_top_users(lim_win=winners)
+        # for i in elements:
+        #     winners += int(i["winners"])
+        # top = await db.select_top_users(lim_win=winners)
         for i in list_all_score:
             text += f"<b>🏅{counter}-o'rin</b> : {i[1]} - {i[4]} ta\n"
             counter += 1
@@ -506,8 +510,8 @@ async def score(message: types.Message):
         if counter:
             text += f'<b>...\n{user_order}-o`rin: {message.from_user.full_name}</b> - {user_score} ta\n\n✅ Sizda <b>{ball[4]} ball</b> mavjud.\n\n' \
                     f'Koʼproq doʼstlaringizni taklif qilib, ballingizni oshiring!\n\n' \
-                    f'👤 Sizning referal link/havolangiz:\n' \
-                    f'https://t.me/Barakali_tanlov_bot?start={message.from_user.id}\n' \
+                    f'👤 Sizning referal link/havolangiz:\n ' \
+                    f'https://t.me/Barakali_tanlov_bot?start={message.from_user.id} \n' \
                     f'<b>Uni koʼproq tanishlaringizga ulashing. Omad!</b>   '
             await message.answer(text=text, disable_web_page_preview=True)
     else:
@@ -558,17 +562,66 @@ async def jsonnn(message: types.Message):
     await bot.send_document(message.from_user.id, document=document)
 
 
+@dp.message_handler(text="Excel File")
+async def marathon(message: types.Message):
+    elements = await db.get_elements()
+    winners_ball = 1
+    for i in elements:
+        winners_ball += int(i["winners"])
+
+    wb = Workbook()
+    ws = wb.active
+    ws['A1'] = "№"
+    ws['B1'] = 'NAME'
+    ws['C1'] = "BAll"
+
+    # Rows can also be appended
+    userss = await db.select_top_users_list()
+    counter = 0
+    for user in userss:
+        if user[4] <= winners_ball:
+            continue
+        else:
+            counter += 1
+            ws.append([f"{counter}-o'rin", f"{user[1]}", f"{user[4]}-ball"])
+
+    # Python types will automatically be converted
+    # import datetime
+    # ws['A2'] = datetime.datetime.now()
+    # for i in ws['A1']:
+    #     print(i.value)
+    n = random.choices(string.ascii_lowercase, k=2)
+    c = random.choices(string.ascii_lowercase, k=2)
+    m = random.choices(string.ascii_lowercase, k=2)
+
+    wb.save(f"{n}-{m}.xlsx")
+    file = InputFile(path_or_bytesio=f'{n}-{m}.xlsx')
+    await message.answer_document(document=file)
+    os.remove(f"{n}-{m}.xlsx")
+
+
 @dp.message_handler(text="G'oliblar haqida ma'lumot")
 async def scoree(message: types.Message):
+    ball = await db.select_user(telegram_id=message.from_user.id)
     counter = 1
-    text = '<b>📊 Ботимизга энг кўп дўстини таклиф қилиб балл тўплаганлар рўйҳати: </b>\n\n'
+    text = '<b>📊 Tanlovimizda eng koʼp doʼstini taklif qilib, yuqori ball toʼplaganlar reytingi:</b>\n\n'
     elements = await db.get_elements()
-    winners = 0
+    winners = 21
+    list_all_score = await db.select_top_users_list()
+    user_score = 0
+    user_order = 0
+    # print(list_all_score)
+    for i in list_all_score:
+        # if user_order != 0:
+        user_order += 1
+        if i[6] == message.from_user.id:
+            user_score += i[4]
+            break
 
-    for i in elements:
-        winners += int(i["winners"])
-    top = await db.select_top_users(lim_win=winners)
-    for i in top:
+    # for i in elements:
+    #     winners += int(i["winners"])
+    # top = await db.select_top_users(lim_win=winners)
+    for i in list_all_score:
         text += f"🏅{counter}-o'rin    <a href='tg://user?id={i[6]}'> {i[1]} </a> • {i[4]} ball," \
                 f" username: @{i[2]}, tg_id: {i[6]} phone: {i[3]}\n"
         counter += 1

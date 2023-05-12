@@ -12,9 +12,9 @@ from loader import dp, db, bot
 from states.rekStates import RekData
 
 
-@dp.message_handler(text='Xabar Yuborish 🗒', user_id=ADMINS)
+@dp.message_handler(text='Barchaga Xabar Yuborish 🗒', user_id=ADMINS)
 async def bot_start(msg: types.Message, state: FSMContext):
-    await msg.answer("<b>Xabarni ni yuboring</b>", reply_markup=back)
+    await msg.answer("<b>Xabarni yuboring</b>", reply_markup=back)
     await RekData.choice.set()
 
 
@@ -26,7 +26,7 @@ async def contumum(msg: types.Message, state: FSMContext):
         await state.finish()
 
     elif msg.video or msg.audio or msg.voice or msg.document or msg.photo or msg.text:
-        if msg.text == 'Xabar Yuborish 🗒':
+        if msg.text == 'Barchaga Xabar Yuborish 🗒':
             await msg.answer('Adashdingiz Shekilli\n\n'
                              'To`g`ri ma`lumot kirting')
         else:
@@ -52,6 +52,54 @@ async def contumum(msg: types.Message, state: FSMContext):
                              f"\n\nБазада жами: <b>{count_baza}</b> та"
                              f" фойдаланувчи мавжуд.", reply_markup=admin_key
                              )
+
+@dp.message_handler(text='Mahsus Xabarni Yuborish 🗒', user_id=ADMINS)
+async def bot_start(msg: types.Message, state: FSMContext):
+    await msg.answer("<b>Xabarni yuboring</b>", reply_markup=back)
+    await RekData.special.set()
+
+
+@dp.message_handler(content_types=['video', 'audio', 'voice', 'photo', 'document', 'text'], user_id=ADMINS,
+                    state=RekData.special)
+async def contumum(msg: types.Message, state: FSMContext):
+    elements = await db.get_elements()
+
+    winner_ball = 0
+    for i in elements:
+        winner_ball += int(i["winners"])
+
+    if msg.text == '🔙️ Orqaga':
+        await msg.answer('Bekor qilindi', reply_markup=admin_key)
+        await state.finish()
+
+    elif msg.video or msg.audio or msg.voice or msg.document or msg.photo or msg.text:
+        if msg.text == 'Mahsus Xabarni Yuborish 🗒':
+            await msg.answer('Adashdingiz Shekilli\n\n'
+                             'To`g`ri ma`lumot kirting')
+        else:
+            await state.finish()
+
+            users = await db.select_all_users()
+            count_baza = await db.count_users()
+            count_err = 0
+            count = 0
+            for user in users:
+                if user[4] <= winner_ball:
+                    continue
+                    print('aaa')
+                else:
+                    try:
+                        await msg.send_copy(chat_id=user[6])
+                        count += 1
+                        await asyncio.sleep(0.05)
+
+                    except Exception as err:
+                        count_err += 1
+                        await asyncio.sleep(0.05)
+
+            await msg.answer(f"Ҳабар юборилганлар: <b>{count}</b> та.", reply_markup=admin_key
+                             )
+
 
 @dp.message_handler(state='*')
 async def back_all(message: types.Message, state: FSMContext):
