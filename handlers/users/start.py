@@ -141,6 +141,8 @@ async def show_channels(message: types.Message, state: FSMContext):
                 await message.answer("<b>Quyidagi menudan kerakli bo`limni tanlang 👇</b>",
                                      reply_markup=menu, disable_web_page_preview=True)
         else:
+            button = types.InlineKeyboardMarkup(row_width=1, )
+
             counter = 0
             # for i in url:
             #     counter += 1
