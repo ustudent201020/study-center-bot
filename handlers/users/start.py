@@ -143,6 +143,7 @@ async def show_channels(message: types.Message, state: FSMContext):
         else:
             button = types.InlineKeyboardMarkup(row_width=1, )
 
+
             counter = 0
             # for i in url:
             #     counter += 1
@@ -317,7 +318,7 @@ async def phone_number(message: types.Message, state: FSMContext):
         await state.finish()
 
 
-@dp.message_handler(text='fix')
+@dp.message_handler(text='fix', user_id=ADMINS)
 async def update_scoreee(message: types.Message):
     await message.answer('id va balni kiriting')
     await DelUser.fix.set()
@@ -627,8 +628,15 @@ async def scoree(message: types.Message):
         text += f"🏅{counter}-o'rin    <a href='tg://user?id={i[6]}'> {i[1]} </a> • {i[4]} ball," \
                 f" username: @{i[2]}, tg_id: {i[6]} phone: {i[3]}\n"
         counter += 1
+        if counter == winners:
+            break
     if counter:
-        await message.answer(text=text, parse_mode=ParseMode.HTML)
+        # text += f'<b>...\n{user_order}-o`rin: {message.from_user.full_name}</b> - {user_score} ta\n\n✅ Sizda <b>{ball[4]} ball</b> mavjud.\n\n' \
+        #         f'Koʼproq doʼstlaringizni taklif qilib, ballingizni oshiring!\n\n' \
+        #         f'👤 Sizning referal link/havolangiz:\n ' \
+        #         f'https://t.me/Barakali_tanlov_bot?start={message.from_user.id} \n' \
+        #         f'<b>Uni koʼproq tanishlaringizga ulashing. Omad!</b>   '
+        await message.answer(text=text, disable_web_page_preview=True)
 
 
 @dp.message_handler(Command('read_file'))
