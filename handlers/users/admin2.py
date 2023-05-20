@@ -298,7 +298,7 @@ async def change_picture(message: types.Message):
 @dp.message_handler(state=RekData.winners)
 async def change_picture_(message: types.Message, state: FSMContext):
     try:
-        text = int(message.text)
+        text = int(message.text) + 2
         if message.text == '/start':
             await message.answer('Bosh menu', reply_markup=menu)
             await state.finish()
