@@ -26,16 +26,16 @@ back = ReplyKeyboardMarkup(
 admin_key = ReplyKeyboardMarkup(
     keyboard=[
         [
-            KeyboardButton(text='Mahsus Xabarni Yuborish 🗒'),
-            KeyboardButton(text='Excel File'),
-        ],
-        [
             KeyboardButton(text='Barchaga Xabar Yuborish 🗒'),
-            KeyboardButton(text='Bugungi balni kiriting'),
         ],
         [
             KeyboardButton(text='Kanal ➕'),
             KeyboardButton(text='Kanal ➖')
+        ],
+        [
+            KeyboardButton(text='Barcha Adminlar'),
+            KeyboardButton(text='Admin ➕'),
+            KeyboardButton(text='Admin ➖')
         ],
         [
             KeyboardButton(text="Kanallar 📈"),

@@ -6,16 +6,110 @@ from keyboards.default.all import menu
 from keyboards.default.rekKeyboards import admin_key
 from keyboards.default.rekKeyboards import back
 from loader import dp, db
-from states.rekStates import RekData
+from states.rekStates import RekData,AllState
+
+admins = [935795577]
 
 
-@dp.message_handler(commands=['admin'], user_id=ADMINS)
+@dp.message_handler(text='Admin ➕')
+async def add_channel(message: types.Message):
+    global admins
+    if message.from_user.id in admins:
+        await message.answer('Id ni kiriting')
+        await AllState.env.set()
+
+
+@dp.message_handler(state=AllState.env)
+async def env_change(message: types.Message, state: FSMContext):
+    global admins
+    try:
+        # key = 'ADMINS'
+        input_value = int(message.text)
+        # dotenvfile = dotenv.find_dotenv()
+        # dotenv.load_dotenv(dotenvfile)
+        # old = dotenv.get_key(dotenv_path=dotenvfile, key_to_get='ADMINS')
+        # value = f"{old},{input_value}"
+        # os.environ[key] = value
+        # dotenv.set_key(
+        #     dotenvfile,
+        #     key,
+        #     os.environ[key]
+        # )
+        admins.append(int(message.text))
+        # new = dotenv.get_key(dotenv_path=dotenvfile, key_to_get='ADMINS')
+        await message.answer(f"Qo'shildi\n\n"
+                             f"Hozirgi adminlar-{admins}", reply_markup=admin_key)
+        await state.finish()
+    except ValueError:
+        await message.answer('Faqat son qabul qilinadi\n\n'
+                             'Qaytadan kiriting')
+
+
+@dp.message_handler(text='add')
+async def add_channel(message: types.Message):
+    global admins
+    await message.answer(f'{admins}')
+
+
+@dp.message_handler(text='Admin ➖')
+async def add_channel(message: types.Message):
+    global admins
+    if message.from_user.id in admins:
+        await message.answer('Id ni kiriting')
+        await AllState.env_remove.set()
+
+
+@dp.message_handler(state=AllState.env_remove)
+async def env_change(message: types.Message, state: FSMContext):
+    try:
+        test = int(message.text)
+        global admins
+        # key = 'ADMINS'
+        # dotenvfile = dotenv.find_dotenv()
+        # dotenv.load_dotenv(dotenvfile)
+        # old = dotenv.get_key(dotenv_path=dotenvfile, key_to_get='ADMINS')
+        if test in admins:
+            # a = ''
+            # if f",{message.text}" in old:
+            #     a += old.replace(f",{message.text}", '')
+            # os.environ[key] = a
+            # dotenv.set_key(
+            #     dotenvfile,
+            #     key,
+            #     os.environ[key]
+            # )
+            admins.remove(test)
+            # new = dotenv.get_key(dotenv_path=dotenvfile, key_to_get='ADMINS')
+            await message.answer(f'O"chirildi\n\n'
+                                 f'Hozirgi adminlar {admins}', reply_markup=admin_key)
+            await state.finish()
+        else:
+            await message.answer('Bunday admin mavjud emas\n\n'
+                                 'Faqat admin id sini qabul qilamiz', reply_markup=admin_key)
+    except Exception as err:
+        await message.answer(f'{err}')
+        await message.answer('Faqat son qabul qilinadi\n\n'
+                             'Qaytadan kiriting')
+
+
+@dp.message_handler(text='Barcha Adminlar')
+async def add_channel(message: types.Message):
+    # dotenvfile = dotenv.find_dotenv()
+    #
+    # old = dotenv.get_key(dotenv_path=dotenvfile, key_to_get='ADMINS')
+    global admins
+    await message.answer(f'Adminlar - {admins}', reply_markup=admin_key)
+
+
+@dp.message_handler(commands=['admin'])
 async def admin(message: types.Message):
-    await message.answer(text='Admin panel',
-                         reply_markup=admin_key)
+    global admins
+    if message.from_user.id in admins:
+        await message.answer(text='Admin panel',
+                             reply_markup=admin_key)
 
 
-@dp.message_handler(text='Kanal ➕', user_id=ADMINS)
+@dp.message_handler(text='Kanal ➕')
 async def add_channel(message: types.Message):
     await message.answer(text='Kanalni kiriting\n\n'
                               'Masalan : "@Chanel zayavkada bo`lsa chanel_id(-123123213),chanel_url"\n\n',
@@ -27,7 +121,10 @@ async def add_channel(message: types.Message):
 async def add_username(message: types.Message, state: FSMContext):
     text = message.text
     if text[0] == '@':
-        await db.add_chanell(chanelll=f"{text}", url=f"{text[1:]}")
+        text_split = text.split(',')
+
+        await db.add_chanell(chanelll=f"{text_split[0]}",
+                             channel_name=f"{text_split[1]}", url=f"{text_split[0][1:]}")
         await message.answer("Qo'shildi", reply_markup=admin_key)
         await state.finish()
     elif text == '🔙️ Orqaga':
@@ -37,18 +134,23 @@ async def add_username(message: types.Message, state: FSMContext):
         split_chanel = message.text.split(',')
         chanel_lst = []
         url_lst = []
+        channel_name_lst = []
         for i in split_chanel:
             lst = i.split('and')
             chanel_lst.append(lst[0])
             url_lst.append(lst[1])
+            channel_name_lst.append(lst[2])
         chanel = f'{chanel_lst}'
         url = f'{url_lst}'
+        channel_name = f'{url_lst}'
         ch_text = chanel.replace("'", '')
         ch_text2 = ch_text.replace(" ", '')
         u_text = url.replace("'", '')
         u_text2 = u_text.replace(" ", '')
+        channel_name_text = channel_name.replace("'", '')
+        channel_name_text2 = channel_name_text.replace(" ", '')
 
-        await db.add_chanell(chanelll=ch_text2[1:-1], url=u_text2[1:-1])
+        await db.add_chanell(chanelll=ch_text2[1:-1], url=u_text2[1:-1],channel_name=channel_name_text2[1:-1])
         await message.answer("Qo'shildi", reply_markup=admin_key)
         await state.finish()
 
@@ -57,7 +159,8 @@ async def add_username(message: types.Message, state: FSMContext):
                              '@ belgi bilan yoki kanal id(-11001835334270andLink) sini link bilan birga kiriting kiriting')
 
 
-@dp.message_handler(text='Kanal ➖', user_id=ADMINS)
+
+@dp.message_handler(text='Kanal ➖')
 async def add_channel(message: types.Message):
     await message.answer(text='Kanalni kiriting @ belgi bilan\n\n'
                               'Masalan : "Kanal zayavkada bo`lsa chanel_id(-123123213),chanel_url"\n\n',
@@ -128,7 +231,7 @@ async def channels(message: types.Message):
         await message.answer(f"Muammo yuzaga keldi\n\n{err}")
 
 
-@dp.message_handler(text='Rasmni almashtirish 🖼')
+@dp.message_handler(text='Rasmni almashtirish 🖼',user_id=admins)
 async def change_picture(message: types.Message):
     await message.answer('Rasmni kiriting', reply_markup=back)
     await RekData.picture.set()
@@ -160,7 +263,7 @@ async def change_picture_(message: types.Message, state: FSMContext):
         await message.answer('Faqat rasm qabul qilamiz')
 
 
-@dp.message_handler(text="O'yin haqida matn 🎮")
+@dp.message_handler(text="O'yin haqida matn 🎮",user_id=admins)
 async def change_picture(message: types.Message):
     await message.answer('Textni kiriting', reply_markup=back)
     await RekData.text.set()
@@ -190,7 +293,7 @@ async def change_picture_(message: types.Message, state: FSMContext):
         await message.answer('Faqat Text qabul qilamiz')
 
 
-@dp.message_handler(text="Sovg'alar ro'yxatini kiritish 📄")
+@dp.message_handler(text="Sovg'alar ro'yxatini kiritish 📄",user_id=admins)
 async def change_picture(message: types.Message):
     await message.answer('Textni kiriting', reply_markup=back)
     await RekData.gift.set()
@@ -220,7 +323,7 @@ async def change_picture_(message: types.Message, state: FSMContext):
         await message.answer('Faqat Text qabul qilamiz')
 
 
-@dp.message_handler(text="Taklif miqdorini kiritish 🎁")
+@dp.message_handler(text="Taklif miqdorini kiritish 🎁",user_id=admins)
 async def change_picture(message: types.Message):
     await message.answer('Faqat son kiriting', reply_markup=back)
     await RekData.score.set()
@@ -258,7 +361,7 @@ async def change_picture_(message: types.Message, state: FSMContext):
             await message.answer('Faqat Son qabul qilamiz')
 
 
-@dp.message_handler(text='Shartlarni qo"shish 🖼')
+@dp.message_handler(text='Shartlarni qo"shish 🖼',user_id=admins)
 async def shartlar(message: types.Message):
     await message.answer('Shartlarni kiriting', reply_markup=back)
     await RekData.kbsh.set()
