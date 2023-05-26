@@ -17,7 +17,6 @@ async def on_startup(dispatcher):
     await db.create_table_chanel()
     await db.create_table_users()
     await db.create_table_chanel_element()
-
     await set_default_commands(dispatcher)
 
     # scheduler = AsyncIOScheduler(timezone='Asia/Tashkent')
