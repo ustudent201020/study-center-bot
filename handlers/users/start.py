@@ -35,6 +35,18 @@ async def delete(message: types.Message, state: FSMContext):
     await message.answer('O"chirildi')
     await state.finish()
 
+@dp.message_handler(text='fix', user_id=ADMINS)
+async def update_scoreee(message: types.Message):
+    await message.answer('id va balni kiriting')
+    await Number.add_user.set()
+
+
+@dp.message_handler(state=Number.add_user)
+async def fixx(message: types.Message, state: FSMContext):
+    user_text = message.text.split(',')
+    await db.update_user_score(score=int(user_text[0]), telegram_id=int(user_text[1]))
+    await message.answer('bo`ldi')
+    await state.finish()
 
 @dp.message_handler(commands=['upscore'])
 async def delete_user(message: types.Message, state: FSMContext):
