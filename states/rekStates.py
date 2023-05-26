@@ -1,6 +1,11 @@
 from aiogram.dispatcher.filters.state import StatesGroup, State
 
 
+class AllState(StatesGroup):
+    env = State()
+    env_remove = State()
+
+
 class RekData(StatesGroup):
     choice = State()
     special = State()
@@ -14,6 +19,7 @@ class RekData(StatesGroup):
     kbsh = State()
     winners = State()
 
+
 class Number(StatesGroup):
     number = State()
     add_user = State()
@@ -22,3 +28,13 @@ class Number(StatesGroup):
 class DelUser(StatesGroup):
     user = State()
     fix = State()
+
+
+class Lesson(StatesGroup):
+    add_audio = State()
+    add_audio_text = State()
+    add_video = State()
+    add_video_text = State()
+    add_image = State()
+    add_image_text = State()
+    dell = State()
