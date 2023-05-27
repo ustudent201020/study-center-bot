@@ -79,6 +79,27 @@ class Database:
         """
         await self.execute(sql, execute=True)
 
+    async def create_table_buttons(self):
+        sql = """
+        CREATE TABLE IF NOT EXISTS buttons (
+        id SERIAL PRIMARY KEY,
+        button_name VARCHAR(301) NOT NULL
+                );
+        """
+        await self.execute(sql, execute=True)
+
+    async def create_table_lessons(self):
+        sql = """
+        CREATE TABLE IF NOT EXISTS lessons (
+        id SERIAL PRIMARY KEY,
+        button_name VARCHAR(301) NOT NULL,
+        file_id VARCHAR(301) NOT NULL,
+        file_unique_id VARCHAR(301) NOT NULL,
+        description TEXT NULL 
+                );
+        """
+        await self.execute(sql, execute=True)
+
     @staticmethod
     def format_args(sql, parameters: dict):
         sql += " AND ".join([
@@ -167,9 +188,9 @@ class Database:
         sql = "SELECT * FROM Channel"
         return await self.execute(sql, fetch=True)
 
-    async def add_chanell(self, chanelll, url,channel_name):
+    async def add_chanell(self, chanelll, url, channel_name):
         sql = "INSERT INTO Channel (chanelll, url,channel_name) VALUES($1, $2,$3) returning *"
-        return await self.execute(sql, chanelll, url,channel_name, fetchrow=True)
+        return await self.execute(sql, chanelll, url, channel_name, fetchrow=True)
 
     async def get_chanel(self, channel):
         sql = f"SELECT * FROM Channel WHERE chanelll=$1"
@@ -232,3 +253,36 @@ class Database:
 
     async def drop_elements(self):
         await self.execute("DROP TABLE Elementt", execute=True)
+
+    ### Lessons DB Commands
+    async def add_button(self, button_name):
+        sql = "INSERT INTO buttons (button_name) VALUES($1) returning *"
+        return await self.execute(sql, button_name, fetchrow=True)
+
+    async def delete_button_name(self, button_name):
+        sql = "DELETE FROM buttons WHERE button_name=$1"
+        await self.execute(sql, button_name, execute=True)
+
+    async def select_buttons(self):
+        sql = "SELECT * FROM buttons"
+        return await self.execute(sql, fetch=True)
+
+    async def add_lesson(self, button_name, file_id, file_unique_id, description=None):
+        sql = "INSERT INTO lessons (button_name,file_id,file_unique_id,description) VALUES($1,$2,$3,$4) returning *"
+        return await self.execute(sql, button_name, file_unique_id, file_id, description, fetchrow=True)
+
+    async def delete_lesson(self, lesson):
+        sql = "DELETE FROM lessons WHERE file_unique_id=$1"
+        await self.execute(sql, lesson, execute=True)
+
+    async def delete_related_lesson(self, button_name):
+        sql = "DELETE FROM lessons WHERE button_name=$1"
+        await self.execute(sql, button_name, execute=True)
+
+    async def select_lessons(self):
+        sql = "SELECT * FROM lessons"
+        return await self.execute(sql, fetch=True)
+
+    async def select_related_lessons(self, button_name):
+        sql = "SELECT * FROM lessons WHERE button_name=$1"
+        return await self.execute(sql, button_name, fetch=True)

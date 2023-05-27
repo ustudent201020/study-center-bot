@@ -11,11 +11,12 @@ from utils.set_bot_commands import set_default_commands
 
 async def on_startup(dispatcher):
     await db.create()
-    await db.drop_Chanel()
-    await db.drop_elements()
-    # await db.drop_users()
+    # await db.drop_Chanel()
+    # await db.drop_elements()
     await db.create_table_chanel()
     await db.create_table_users()
+    await db.create_table_lessons()
+    await db.create_table_buttons()
     await db.create_table_chanel_element()
 
     await set_default_commands(dispatcher)
@@ -25,7 +26,6 @@ async def on_startup(dispatcher):
     # scheduler.add_job(start.send, trigger='interval', seconds=60, kwargs={'bot': Bot})
     # scheduler.add_job(start.jsonn, trigger='interval', days=11)
     # scheduler.start()
-
 
     # Bot ishga tushgani haqida adminga xabar berish
     await on_startup_notify(dispatcher)
