@@ -1,12 +1,15 @@
+import asyncio
+
 from aiogram import types
 from aiogram.dispatcher import FSMContext
+from aiogram.types import ReplyKeyboardMarkup, KeyboardButton
 
 from data.config import ADMINS
 from keyboards.default.all import menu
-from keyboards.default.rekKeyboards import admin_key
+from keyboards.default.rekKeyboards import admin_key,darslar_key
 from keyboards.default.rekKeyboards import back
-from loader import dp, db
-from states.rekStates import RekData,AllState
+from loader import dp, db, bot
+from states.rekStates import RekData, AllState, Lesson
 
 admins = [935795577]
 
@@ -38,7 +41,7 @@ async def env_change(message: types.Message, state: FSMContext):
         admins.append(int(message.text))
         # new = dotenv.get_key(dotenv_path=dotenvfile, key_to_get='ADMINS')
         await message.answer(f"Qo'shildi\n\n"
-                             f"Hozirgi adminlar-{admins}", reply_markup=admin_key)
+                             f"Hozirgi adminlar-{admins}", reply_markup=darslar_key)
         await state.finish()
     except ValueError:
         await message.answer('Faqat son qabul qilinadi\n\n'
@@ -81,11 +84,11 @@ async def env_change(message: types.Message, state: FSMContext):
             admins.remove(test)
             # new = dotenv.get_key(dotenv_path=dotenvfile, key_to_get='ADMINS')
             await message.answer(f'O"chirildi\n\n'
-                                 f'Hozirgi adminlar {admins}', reply_markup=admin_key)
+                                 f'Hozirgi adminlar {admins}', reply_markup=darslar_key)
             await state.finish()
         else:
             await message.answer('Bunday admin mavjud emas\n\n'
-                                 'Faqat admin id sini qabul qilamiz', reply_markup=admin_key)
+                                 'Faqat admin id sini qabul qilamiz', reply_markup=darslar_key)
     except Exception as err:
         await message.answer(f'{err}')
         await message.answer('Faqat son qabul qilinadi\n\n'
@@ -98,7 +101,7 @@ async def add_channel(message: types.Message):
     #
     # old = dotenv.get_key(dotenv_path=dotenvfile, key_to_get='ADMINS')
     global admins
-    await message.answer(f'Adminlar - {admins}', reply_markup=admin_key)
+    await message.answer(f'Adminlar - {admins}', reply_markup=darslar_key)
 
 
 @dp.message_handler(commands=['admin'])
@@ -107,6 +110,14 @@ async def admin(message: types.Message):
     if message.from_user.id in admins:
         await message.answer(text='Admin panel',
                              reply_markup=admin_key)
+
+@dp.message_handler(commands=['darslar'])
+async def admin(message: types.Message):
+    global admins
+    if message.from_user.id in admins:
+        await message.answer(text='Admin panel',
+                             reply_markup=darslar_key)
+
 
 
 @dp.message_handler(text='Kanal ➕')
@@ -150,14 +161,13 @@ async def add_username(message: types.Message, state: FSMContext):
         channel_name_text = channel_name.replace("'", '')
         channel_name_text2 = channel_name_text.replace(" ", '')
 
-        await db.add_chanell(chanelll=ch_text2[1:-1], url=u_text2[1:-1],channel_name=channel_name_text2[1:-1])
+        await db.add_chanell(chanelll=ch_text2[1:-1], url=u_text2[1:-1], channel_name=channel_name_text2[1:-1])
         await message.answer("Qo'shildi", reply_markup=admin_key)
         await state.finish()
 
     else:
         await message.answer('Xato\n\n'
                              '@ belgi bilan yoki kanal id(-11001835334270andLink) sini link bilan birga kiriting kiriting')
-
 
 
 @dp.message_handler(text='Kanal ➖')
@@ -199,10 +209,65 @@ async def del_username(message: types.Message, state: FSMContext):
         await state.finish()
 
 
-# @dp.message_handler(text='Statistika 📊')
-# async def show_users(message: types.Message):
-#     a = await db.count_users()
-#     await message.answer(f'<b>🔷 Жами обуначилар: {a} та</b>')
+activee = 0
+blockk = 0
+
+
+async def is_activeee():
+    users = await db.select_all_users()
+    global activee
+    global blockk
+    activate_test = 0
+    blockk_test = 0
+    # activee = 0
+    # blockk = 0
+    for user in users:
+
+        user_id = user[6]
+        try:
+            await bot.send_chat_action(chat_id=user_id, action='typing')
+            activate_test += 1
+            await asyncio.sleep(0.034)
+
+        except Exception as err:
+            blockk_test += 1
+            await asyncio.sleep(0.034)
+    activee = activate_test
+    blockk = blockk_test
+
+
+@dp.message_handler(text='ttt')
+async def is_activeee(a=None):
+    users = await db.select_all_users()
+    global activee
+    global blockk
+    activate_test = 0
+    blockk_test = 0
+    # activee = 0
+    # blockk = 0
+    for user in users:
+        user_id = user[6]
+        try:
+            await bot.send_chat_action(chat_id=user_id, action='typing')
+            activate_test += 1
+            await asyncio.sleep(0.034)
+
+        except Exception as err:
+            blockk_test += 1
+            await asyncio.sleep(0.034)
+    activee = activate_test
+    blockk = blockk_test
+
+
+@dp.message_handler(text='Statistika 📊')
+async def show_users(message: types.Message):
+    a = await db.count_users()
+    global activee
+    global blockk
+
+    await message.answer(f'<b>🔵 Jami obunachilar: {a} ta\n\n'
+                         f'🟡 Active: {activee}\n'
+                         f'⚫️ Block : {blockk}</b>')
 
 
 @dp.message_handler(text='🏘 Bosh menu')
@@ -231,7 +296,7 @@ async def channels(message: types.Message):
         await message.answer(f"Muammo yuzaga keldi\n\n{err}")
 
 
-@dp.message_handler(text='Rasmni almashtirish 🖼',user_id=admins)
+@dp.message_handler(text='Rasmni almashtirish 🖼', user_id=admins)
 async def change_picture(message: types.Message):
     await message.answer('Rasmni kiriting', reply_markup=back)
     await RekData.picture.set()
@@ -263,7 +328,7 @@ async def change_picture_(message: types.Message, state: FSMContext):
         await message.answer('Faqat rasm qabul qilamiz')
 
 
-@dp.message_handler(text="O'yin haqida matn 🎮",user_id=admins)
+@dp.message_handler(text="O'yin haqida matn 🎮", user_id=admins)
 async def change_picture(message: types.Message):
     await message.answer('Textni kiriting', reply_markup=back)
     await RekData.text.set()
@@ -293,7 +358,7 @@ async def change_picture_(message: types.Message, state: FSMContext):
         await message.answer('Faqat Text qabul qilamiz')
 
 
-@dp.message_handler(text="Sovg'alar ro'yxatini kiritish 📄",user_id=admins)
+@dp.message_handler(text="Sovg'alar ro'yxatini kiritish 📄", user_id=admins)
 async def change_picture(message: types.Message):
     await message.answer('Textni kiriting', reply_markup=back)
     await RekData.gift.set()
@@ -323,7 +388,7 @@ async def change_picture_(message: types.Message, state: FSMContext):
         await message.answer('Faqat Text qabul qilamiz')
 
 
-@dp.message_handler(text="Taklif miqdorini kiritish 🎁",user_id=admins)
+@dp.message_handler(text="Taklif miqdorini kiritish 🎁", user_id=admins)
 async def change_picture(message: types.Message):
     await message.answer('Faqat son kiriting', reply_markup=back)
     await RekData.score.set()
@@ -361,7 +426,7 @@ async def change_picture_(message: types.Message, state: FSMContext):
             await message.answer('Faqat Son qabul qilamiz')
 
 
-@dp.message_handler(text='Shartlarni qo"shish 🖼',user_id=admins)
+@dp.message_handler(text='Shartlarni qo"shish 🖼', user_id=admins)
 async def shartlar(message: types.Message):
     await message.answer('Shartlarni kiriting', reply_markup=back)
     await RekData.kbsh.set()
@@ -427,3 +492,55 @@ async def change_picture_(message: types.Message, state: FSMContext):
 
         else:
             await message.answer('Faqat Son qabul qilamiz')
+
+
+@dp.message_handler(text='Tugma ➕')
+async def add_channel(message: types.Message):
+    await message.answer(text='Textni kiriting\n\n',
+                         reply_markup=back)
+    await Lesson.but_add.set()
+
+
+@dp.message_handler(state=Lesson.but_add)
+async def add_username(message: types.Message, state: FSMContext):
+    text = message.text
+    if text == '🔙️ Orqaga':
+        await message.answer('Admin panel', reply_markup=darslar_key)
+        await state.finish()
+    else:
+        await db.add_button(button_name=message.text)
+        await message.answer("Qo'shildi", reply_markup=darslar_key)
+        await state.finish()
+
+
+@dp.message_handler(text='Tugma ➖')
+async def add_channel(message: types.Message):
+    buttons = await db.select_buttons()
+    but = ReplyKeyboardMarkup(row_width=2, resize_keyboard=True, )
+    but.add(*(KeyboardButton(text=str(button[1])) for button in buttons))
+    but.add(KeyboardButton(text='🔙️ Orqaga'))
+    await message.answer(
+        text="Tugmani tanlang\n\n"
+             "Tugmaga biriktirilgan barcha ma'lumotlar ham o'chadi\n\nBarchasiga rozimisiz",
+        reply_markup=but
+    )
+    await Lesson.but_del.set()
+
+
+@dp.message_handler(state=Lesson.but_del)
+async def del_button(message: types.Message, state: FSMContext):
+    txt = message.text
+    buttons = await db.select_buttons()
+    all_buttons_list = []
+    for button in buttons:
+        all_buttons_list.append(button[1])
+    if txt == '🔙️ Orqaga':
+        await message.answer('Admin panel', reply_markup=darslar_key)
+        await state.finish()
+    elif message.text in all_buttons_list:
+        await db.delete_button_name(button_name=message.text)
+        await db.delete_lesson(lesson=message.text)
+        await message.answer("O'chirildi", reply_markup=darslar_key)
+        await state.finish()
+    else:
+        await message.answer('Xato\n\nTugmalardan birini tanlang yoki orqaga tugmasini bosing')

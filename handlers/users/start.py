@@ -5,11 +5,10 @@ import string
 import os
 import asyncpg
 from aiogram import types
-from aiogram.types import ParseMode,InputFile
+from aiogram.types import ParseMode, InputFile, ReplyKeyboardMarkup, KeyboardButton
 from aiogram.dispatcher import FSMContext
 from aiogram.dispatcher.filters import Command, CommandStart
 from openpyxl import Workbook
-
 
 from data.config import CHANNELS, ADMINS
 from keyboards.default.all import number, menu
@@ -18,15 +17,10 @@ from loader import bot, dp, db
 from states.rekStates import Number, DelUser
 from utils.misc import subscription
 from keyboards.default.all import menu
-from keyboards.default.rekKeyboards import admin_key
+from keyboards.default.rekKeyboards import admin_key, main_menu
 from keyboards.default.rekKeyboards import back
 from states.rekStates import RekData
 
-
-@dp.message_handler(commands=['del'])
-async def delete_user(message: types.Message, state: FSMContext):
-    await message.answer('Id ni kiriting')
-    await DelUser.user.set()
 
 @dp.message_handler(text='fix', user_id=ADMINS)
 async def update_scoreee(message: types.Message):
@@ -40,6 +34,11 @@ async def fixx(message: types.Message, state: FSMContext):
     await db.update_user_score(score=int(user_text[0]), telegram_id=int(user_text[1]))
     await message.answer('bo`ldi')
     await state.finish()
+
+@dp.message_handler(commands=['del'])
+async def delete_user(message: types.Message, state: FSMContext):
+    await message.answer('Id ni kiriting')
+    await DelUser.user.set()
 
 
 @dp.message_handler(state=DelUser.user)
@@ -99,7 +98,6 @@ async def show_channels(message: types.Message, state: FSMContext):
             url.append(i['url'])
             channel_names.append(i['channel_name'])
 
-
         for channel in chanels:
             status *= await subscription.check(user_id=message.from_user.id,
                                                channel=f'{channel}')
@@ -149,7 +147,6 @@ async def show_channels(message: types.Message, state: FSMContext):
             url.append(i['url'])
             channel_names.append(i['channel_name'])
 
-
         for channel in chanels:
             status *= await subscription.check(user_id=message.from_user.id,
                                                channel=f'{channel}')
@@ -167,7 +164,7 @@ async def show_channels(message: types.Message, state: FSMContext):
                 await Number.number.set()
             else:
                 await message.answer("<b>Quyidagi menudan kerakli bo`limni tanlang 👇</b>",
-                                     reply_markup=menu, disable_web_page_preview=True)
+                                     reply_markup=main_menu, disable_web_page_preview=True)
         else:
             button = types.InlineKeyboardMarkup(row_width=1, )
             counter = 0
@@ -216,7 +213,7 @@ async def show_channels(message: types.Message, state: FSMContext):
                 await Number.number.set()
             else:
                 await message.answer("<b>Quyidagi menudan kerakli bo`limni tanlang 👇</b>",
-                                     reply_markup=menu, disable_web_page_preview=True)
+                                     reply_markup=main_menu, disable_web_page_preview=True)
         else:
             button = types.InlineKeyboardMarkup(row_width=1, )
             counter = 0
@@ -277,7 +274,7 @@ async def checker(call: types.CallbackQuery, state: FSMContext):
             await bot.delete_message(chat_id=call.message.chat.id, message_id=call.message.message_id)
         else:
             await call.message.answer("<b>Quyidagi menudan kerakli bo`limni tanlang 👇</b>",
-                                      reply_markup=menu, disable_web_page_preview=True)
+                                      reply_markup=main_menu, disable_web_page_preview=True)
 
     else:
         button = types.InlineKeyboardMarkup(row_width=1, )
@@ -294,6 +291,7 @@ async def checker(call: types.CallbackQuery, state: FSMContext):
                                          disable_web_page_preview=True)
         except Exception as e:
             pass
+
 
 @dp.message_handler(state=Number.number, content_types=types.ContentType.CONTACT)
 async def phone_number(message: types.Message, state: FSMContext):
@@ -333,7 +331,7 @@ async def phone_number(message: types.Message, state: FSMContext):
             await state.finish()
         else:
             await message.answer("<b>Quyidagi menudan kerakli bo`limni tanlang 👇</b>",
-                                 reply_markup=menu, disable_web_page_preview=True)
+                                 reply_markup=main_menu, disable_web_page_preview=True)
             await state.finish()
     else:
         await message.answer('Kechirasiz Faqat O`zbekiston raqamlarini qabul qilamiz',
@@ -378,7 +376,7 @@ async def tanlov(message: types.Message):
         status *= await subscription.check(user_id=message.from_user.id,
                                            channel=f'{channel}')
     if status:
-        txt += f'\n\nhttps://t.me/Barakali_tanlov_bot?start={message.from_user.id}'
+        txt += f'\n\nhttp://t.me/goenglishuzbot?start={message.from_user.id}'
         await message.answer_photo(photo=photo,
                                    caption=txt,
                                    parse_mode='HTML'
@@ -399,6 +397,7 @@ async def tanlov(message: types.Message):
             ' tugmasini bosing.',
             reply_markup=button,
             disable_web_page_preview=True)
+
 
 @dp.message_handler(text='🎁 Sovg`alar')
 async def my_score(message: types.Message):
@@ -439,6 +438,7 @@ async def my_score(message: types.Message):
             ' tugmasini bosing.',
             reply_markup=button,
             disable_web_page_preview=True)
+
 
 @dp.message_handler(text='👤 Ballarim')
 async def my_score(message: types.Message):
@@ -594,6 +594,7 @@ async def help(message: types.Message):
             reply_markup=button,
             disable_web_page_preview=True)
 
+
 @dp.message_handler(Command('jsonFile'))
 async def jsonnn(message: types.Message):
     user_list = []
@@ -704,3 +705,8 @@ async def json_reader(message: types.Message):
         except Exception as e:
             print(e)
     f.close()
+
+
+@dp.message_handler(commands=['dasturchi'])
+async def i_2(message: types.Message):
+    await message.answer('🧑‍💻Dasturchi: @Ilyosbek_Kv')

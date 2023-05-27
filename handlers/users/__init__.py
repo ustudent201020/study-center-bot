@@ -1,3 +1,4 @@
+from . import new_sections
 from . import help
 from . import lessons
 from . import admin2

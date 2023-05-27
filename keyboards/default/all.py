@@ -13,9 +13,9 @@ menu = ReplyKeyboardMarkup(
             KeyboardButton(text='📊 Reyting'),
             KeyboardButton(text='💡 Shartlar'),
         ],
-        # [
-        #     KeyboardButton(text='📈 Статистика')
-        # ]
+        [
+            KeyboardButton(text='🔝 Bosh menu')
+        ]
     ],
     resize_keyboard=True
 )

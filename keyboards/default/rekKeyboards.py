@@ -22,7 +22,60 @@ back = ReplyKeyboardMarkup(
     resize_keyboard=True
 )
 
+main_section = ReplyKeyboardMarkup(
+    keyboard=[
+        [
+            KeyboardButton(text='🔝 Bosh menu'),
+        ]
+    ],
+    resize_keyboard=True
+)
 
+main_menu = ReplyKeyboardMarkup(
+    keyboard=[
+        [
+            KeyboardButton(text='- Tanlov'),
+        ],
+        [
+            KeyboardButton(text="- Go School")
+        ]
+    ], resize_keyboard=True
+)
+
+save = ReplyKeyboardMarkup(
+    keyboard=[
+        [
+            KeyboardButton(text='Video Yuklash'),
+            KeyboardButton(text='Rasm Yuklash'),
+            KeyboardButton(text='Audio Yuklash'),
+        ],
+        [
+            KeyboardButton(text='🔙️ Orqaga')
+        ]
+    ], resize_keyboard=True
+)
+darslar_key = ReplyKeyboardMarkup(
+    keyboard=[
+        [
+            KeyboardButton(text='Add File'),
+            KeyboardButton(text='Remove File')
+        ],
+        [
+            KeyboardButton(text='Barcha Adminlar'),
+            KeyboardButton(text='Admin ➕'),
+            KeyboardButton(text='Admin ➖')
+        ],
+        [
+            KeyboardButton(text='Tugma ➕'),
+            KeyboardButton(text='Tugma ➖')
+        ],
+        [
+            KeyboardButton(text="🏘 Bosh menu")
+
+        ],
+    ],
+    resize_keyboard=True
+)
 admin_key = ReplyKeyboardMarkup(
     keyboard=[
         [
@@ -31,11 +84,6 @@ admin_key = ReplyKeyboardMarkup(
         [
             KeyboardButton(text='Kanal ➕'),
             KeyboardButton(text='Kanal ➖')
-        ],
-        [
-            KeyboardButton(text='Barcha Adminlar'),
-            KeyboardButton(text='Admin ➕'),
-            KeyboardButton(text='Admin ➖')
         ],
         [
             KeyboardButton(text="Kanallar 📈"),
