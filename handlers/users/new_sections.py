@@ -2,6 +2,7 @@ from aiogram import types
 from aiogram.types import ReplyKeyboardMarkup, KeyboardButton
 
 from keyboards.default.all import menu
+from keyboards.default.rekKeyboards import main_menu
 from loader import dp, db
 from utils.misc import subscription
 
