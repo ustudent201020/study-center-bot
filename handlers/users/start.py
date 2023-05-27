@@ -327,7 +327,7 @@ async def phone_number(message: types.Message, state: FSMContext):
             # disable_web_page_preview=True)
             await message.answer("<b>🎉Tabriklaymiz, siz tanlov ishtirokchisiga aylandingiz!</b>\n\n"
                                  "Quyidagi menudan kerakli bo`limni tanlang 👇",
-                                 reply_markup=menu, disable_web_page_preview=True)
+                                 reply_markup=main_menu, disable_web_page_preview=True)
             await state.finish()
         else:
             await message.answer("<b>Quyidagi menudan kerakli bo`limni tanlang 👇</b>",
