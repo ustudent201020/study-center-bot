@@ -1,6 +1,7 @@
 from aiogram import types
 
-from loader import dp
+from loader import dp, db
+
 buttons = ['aaa']
 
 @dp.message_handler(text=buttons)
