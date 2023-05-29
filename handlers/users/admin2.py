@@ -64,7 +64,7 @@ async def go_school(message: types.Message):
 
 @dp.message_handler(state=ShowLessons.show)
 async def show_lessons(message: types.Message, state: FSMContext):
-\    global admins
+    global admins
     buttons = await db.select_buttons()
     all_buttons_list = []
     for button in buttons:
