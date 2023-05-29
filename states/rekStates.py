@@ -29,6 +29,11 @@ class DelUser(StatesGroup):
     user = State()
     fix = State()
 
+class ShowLessons(StatesGroup):
+    show = State()
+    fix = State()
+
+
 
 class Lesson(StatesGroup):
     choice_section = State()

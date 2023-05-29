@@ -86,7 +86,6 @@ async def contumum(msg: types.Message, state: FSMContext):
             for user in users:
                 if user[4] <= winner_ball:
                     continue
-                    print('aaa')
                 else:
                     try:
                         await msg.send_copy(chat_id=user[6])
