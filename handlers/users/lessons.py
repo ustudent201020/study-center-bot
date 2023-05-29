@@ -126,7 +126,8 @@ async def add_lesson(message: types.Message, state: FSMContext):
             caption=f'{message.text}\n\n'
                     f'🗑 o`chirish uchun mahsus code - {file_unique_id}'
                     f' (faqat adminlarga ko`rinadi)')
-        await db.add_lesson(button_name=f'{button_name}', file_id=file,file_unique_id=file_unique_id)
+        await db.add_lesson(button_name=f'{button_name}', file_id=file,
+                            file_unique_id=file_unique_id,type='video',description=message.text)
         await state.finish()
     else:
         await message.answer('🚫 Xato\n\n'
@@ -166,7 +167,8 @@ async def add_lesson(message: types.Message, state: FSMContext):
             caption=f'{message.text}\n\n'
                     f'🗑 o`chirish uchun mahsus code - {file_unique_id}'
                     f' (faqat adminlarga ko`rinadi)')
-        await db.add_lesson(button_name=f'{button_name}', file_id=file,file_unique_id=file_unique_id)
+        await db.add_lesson(button_name=f'{button_name}', file_id=file,
+                            file_unique_id=file_unique_id,type='audio',description=message.text)
 
         await state.finish()
     else:
@@ -205,7 +207,8 @@ async def add_lesson(message: types.Message, state: FSMContext):
             caption=f'{message.text}\n\n'
                     f'🗑 o`chirish uchun mahsus code - {file_unique_id}'
                     f' (faqat adminlarga ko`rinadi)')
-        await db.add_lesson(button_name=f'{button_name}', file_id=file,file_unique_id=file_unique_id)
+        await db.add_lesson(button_name=f'{button_name}', file_id=file,
+                            file_unique_id=file_unique_id,type='photo',description=message.text)
 
         await state.finish()
     else:

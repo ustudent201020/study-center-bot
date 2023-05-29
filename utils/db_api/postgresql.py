@@ -93,6 +93,7 @@ class Database:
         CREATE TABLE IF NOT EXISTS lessons (
         id SERIAL PRIMARY KEY,
         button_name VARCHAR(301) NOT NULL,
+        type VARCHAR(301) NOT NULL,
         file_id VARCHAR(301) NOT NULL,
         file_unique_id VARCHAR(301) NOT NULL,
         description TEXT NULL 
@@ -267,13 +268,13 @@ class Database:
         sql = "SELECT * FROM buttons"
         return await self.execute(sql, fetch=True)
 
-    async def add_lesson(self, button_name, file_id, file_unique_id, description=None):
-        sql = "INSERT INTO lessons (button_name,file_id,file_unique_id,description) VALUES($1,$2,$3,$4) returning *"
-        return await self.execute(sql, button_name, file_unique_id, file_id, description, fetchrow=True)
+    async def add_lesson(self, button_name,type, file_id, file_unique_id, description):
+        sql = "INSERT INTO lessons (button_name,type,file_id,file_unique_id,description) VALUES($1,$2,$3,$4,$5) returning *"
+        return await self.execute(sql, button_name,type, file_id, file_unique_id, description, fetchrow=True)
 
     async def delete_lesson(self, file_unique_id):
         sql = "DELETE FROM lessons WHERE file_unique_id=$1"
-        await self.execute(sql, lesson, execute=True)
+        await self.execute(sql, file_unique_id, execute=True)
 
     async def delete_related_lesson(self, button_name):
         sql = "DELETE FROM lessons WHERE button_name=$1"
@@ -282,7 +283,12 @@ class Database:
     async def select_lessons(self):
         sql = "SELECT * FROM lessons"
         return await self.execute(sql, fetch=True)
+    async def select_lesson_by_button_name(self,button_name):
+        sql = "SELECT * FROM lessons WHERE button_name=$1"
+        return await self.execute(sql,button_name, fetch=True)
 
     async def select_related_lessons(self, button_name):
         sql = "SELECT * FROM lessons WHERE button_name=$1"
         return await self.execute(sql, button_name, fetch=True)
+    async def drop_lessons(self):
+        await self.execute("DROP TABLE lessons", execute=True)

@@ -6,10 +6,11 @@ from aiogram.types import ReplyKeyboardMarkup, KeyboardButton
 
 from data.config import ADMINS
 from keyboards.default.all import menu
-from keyboards.default.rekKeyboards import admin_key,darslar_key
+from keyboards.default.rekKeyboards import admin_key, darslar_key
 from keyboards.default.rekKeyboards import back
 from loader import dp, db, bot
-from states.rekStates import RekData, AllState, Lesson
+from states.rekStates import RekData, AllState, Lesson, ShowLessons
+from utils.misc import subscription
 
 admins = [935795577]
 
@@ -20,6 +21,95 @@ async def add_channel(message: types.Message):
     if message.from_user.id in admins:
         await message.answer('Id ni kiriting')
         await AllState.env.set()
+
+
+@dp.message_handler(text='- Go School')
+async def go_school(message: types.Message):
+    status = True
+    all = await db.select_chanel()
+    chanels = []
+    url = []
+    channel_names = []
+    for i in all:
+        chanels.append(i['chanelll'])
+        url.append(i['url'])
+        channel_names.append(i['channel_name'])
+
+    for channel in chanels:
+        status *= await subscription.check(user_id=message.from_user.id,
+                                           channel=f'{channel}')
+    if status:
+        buttons = await db.select_buttons()
+        but = ReplyKeyboardMarkup(row_width=2, resize_keyboard=True, )
+        but.add(*(KeyboardButton(text=str(button[1])) for button in buttons))
+        but.add(KeyboardButton(text='🔝 Bosh menu'))
+
+        await message.answer("Hozir <b>-Go School</b> bo'limidasiz",
+                             reply_markup=but, disable_web_page_preview=True)
+        await ShowLessons.show.set()
+    else:
+        button = types.InlineKeyboardMarkup(row_width=1, )
+        counter = 0
+        for i in url:
+            button.add(types.InlineKeyboardButton(f"{channel_names[counter]}", url=f'https://t.me/{i}'))
+            counter += 1
+        button.add(types.InlineKeyboardButton(text="A’zo bo’ldim", callback_data="check_subs"))
+
+        await message.answer(
+            '✅Tanlovda ishtirok etish uchun quyidagi kanallarga a’zo bo’ling.\nKeyin <b>“A’zo bo’ldim”</b>'
+            ' tugmasini bosing.',
+            reply_markup=button,
+            disable_web_page_preview=True)
+
+
+@dp.message_handler(state=ShowLessons.show)
+async def show_lessons(message: types.Message, state: FSMContext):
+    print('ishladi')
+    global admins
+    buttons = await db.select_buttons()
+    all_buttons_list = []
+    for button in buttons:
+        all_buttons_list.append(button[1])
+
+    if message.text in all_buttons_list:
+        lessonss = await db.select_lesson_by_button_name(button_name=message.text)
+        for i in lessonss:
+
+            if message.from_user.id in admins:
+                if i[2] == 'video':
+                    await message.answer_video(
+                        video=f"{i[3]}",
+                        caption=f'{i[5]}\n\n'
+                                f'🗑 o`chirish uchun mahsus code - {i[4]}'
+                                f' (faqat adminlarga ko`rinadi)'
+                    )
+                elif i[2] == 'audio':
+                    await message.answer_audio(
+                        audio=f"{i[3]}",
+                        caption=f'{i[5]}\n\n'
+                                f'🗑 o`chirish uchun mahsus code - {i[4]}'
+                                f' (faqat adminlarga ko`rinadi)'
+                    )
+                elif i[2] == 'photo':
+                    await message.answer_photo(
+                        photo=f"{i[3]}",
+                        caption=f'{i[5]}\n\n'
+                                f'🗑 o`chirish uchun mahsus code - {i[4]}'
+                                f' (faqat adminlarga ko`rinadi)'
+                    )
+            else:
+                if i[2] == 'video':
+                    await message.answer_video(video=f"{i[3]}", caption=f'{i[5]}')
+                elif i[2] == 'audio':
+                    await message.answer_audio(audio=f"{i[3]}", caption=f'{i[5]}')
+                elif i[2] == 'photo':
+                    await message.answer_photo(photo=f"{i[3]}", caption=f'{i[5]}')
+
+    elif message.text == '🔝 Bosh menu':
+        await message.answer('Bosh Menu')
+        await state.finish()
+    else:
+        await message.answer("Ko'rsatilgan bo'limlardan birini tanlang ")
 
 
 @dp.message_handler(state=AllState.env)
@@ -111,13 +201,13 @@ async def admin(message: types.Message):
         await message.answer(text='Admin panel',
                              reply_markup=admin_key)
 
+
 @dp.message_handler(commands=['darslar'])
 async def admin(message: types.Message):
     global admins
     if message.from_user.id in admins:
         await message.answer(text='Admin panel',
                              reply_markup=darslar_key)
-
 
 
 @dp.message_handler(text='Kanal ➕')
