@@ -20,10 +20,10 @@ async def add_channel(message: types.Message):
         text="Barcha ma'lumotlar o'chadi\n\nBarchasiga rozimisiz\n\nHa bo'lsa file_unique_id ni kiriting",
         reply_markup=back
     )
-    await Lesson.but_del.set()
+    await Lesson.but_del.les_del()
 
 
-@dp.message_handler(state=Lesson.but_del)
+@dp.message_handler(state=Lesson.les_del)
 async def del_button(message: types.Message, state: FSMContext):
     txt = message.text
     lessons = await db.select_lessons()

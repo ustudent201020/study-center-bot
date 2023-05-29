@@ -50,3 +50,4 @@ class Lesson(StatesGroup):
     dell = State()
     but_add = State()
     but_del = State()
+    les_del = State()
