@@ -6,11 +6,6 @@ from keyboards.default.rekKeyboards import main_menu
 from loader import dp, db
 from utils.misc import subscription
 
-buttons = ['aaa']
-
-@dp.message_handler(text=buttons)
-async def tanlov(message: types.Message):
-    print('ishladi')
 
 
 

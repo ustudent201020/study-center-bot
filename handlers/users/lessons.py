@@ -17,7 +17,7 @@ async def add_channel(message: types.Message):
     # but.add(*(KeyboardButton(text=str(button[1])) for button in buttons))
     # but.add(KeyboardButton(text='🔙️ Orqaga'))
     await message.answer(
-        text="Barcha ma'lumotlar o'chadi\n\nBarchasiga rozimisiz",
+        text="Barcha ma'lumotlar o'chadi\n\nBarchasiga rozimisiz\n\nHa bo'lsa file_unique_id ni kiriting",
         reply_markup=back
     )
     await Lesson.but_del.set()
@@ -27,14 +27,14 @@ async def add_channel(message: types.Message):
 async def del_button(message: types.Message, state: FSMContext):
     txt = message.text
     lessons = await db.select_lessons()
-    all_lessons_list = []
+    unique_id = []
     for lesson in lessons:
-        all_lessons_list.append(lesson[1])
+        unique_id.append(lesson[3])
     if txt == '🔙️ Orqaga':
         await message.answer('Admin panel', reply_markup=darslar_key)
         await state.finish()
-    elif message.text in all_lessons_list:
-        await db.delete_lesson(lesson=message.text)
+    elif message.text in unique_id:
+        await db.delete_lesson(file_unique_id=message.text)
         await message.answer("O'chirildi", reply_markup=darslar_key)
         await state.finish()
     else:
@@ -116,6 +116,7 @@ async def add_lesson(message: types.Message, state: FSMContext):
     data = await state.get_data()
 
     file = data.get('file_id')
+    button_name = data.get('button_name')
     file_unique_id = data.get('file_unique_id')
     if message.text:
         await message.answer("Qo'shildi")
@@ -125,6 +126,7 @@ async def add_lesson(message: types.Message, state: FSMContext):
             caption=f'{message.text}\n\n'
                     f'🗑 o`chirish uchun mahsus code - {file_unique_id}'
                     f' (faqat adminlarga ko`rinadi)')
+        await db.add_lesson(button_name=f'{button_name}', file_id=file,file_unique_id=file_unique_id)
         await state.finish()
     else:
         await message.answer('🚫 Xato\n\n'
@@ -134,7 +136,6 @@ async def add_lesson(message: types.Message, state: FSMContext):
 @dp.message_handler(state=Lesson.add_audio, content_types=['video', 'audio', 'voice', 'photo', 'document', 'text'])
 async def add_lesson(message: types.Message, state: FSMContext):
     if message.audio:
-        print(message.audio)
         await state.update_data(
             {
                 "file_id": message.audio.file_id,
@@ -156,6 +157,7 @@ async def add_lesson(message: types.Message, state: FSMContext):
 
     file = data.get('file_id')
     file_unique_id = data.get('file_unique_id')
+    button_name = data.get('button_name')
     if message.text != "Shart emas":
         await message.answer("Qo'shildi")
         await bot.send_audio(
@@ -164,6 +166,8 @@ async def add_lesson(message: types.Message, state: FSMContext):
             caption=f'{message.text}\n\n'
                     f'🗑 o`chirish uchun mahsus code - {file_unique_id}'
                     f' (faqat adminlarga ko`rinadi)')
+        await db.add_lesson(button_name=f'{button_name}', file_id=file,file_unique_id=file_unique_id)
+
         await state.finish()
     else:
         await message.answer('🚫 Xato\n\n'
@@ -173,7 +177,6 @@ async def add_lesson(message: types.Message, state: FSMContext):
 @dp.message_handler(state=Lesson.add_image, content_types=['video', 'audio', 'voice', 'photo', 'document', 'text'])
 async def add_image(message: types.Message, state: FSMContext):
     if message.photo:
-        print(message.photo)
         await state.update_data(
             {
                 "file_id": message.photo[-1].file_id,
@@ -193,6 +196,7 @@ async def add_lesson(message: types.Message, state: FSMContext):
     data = await state.get_data()
 
     file = data.get('file_id')
+    button_name = data.get('button_name')
     file_unique_id = data.get('file_unique_id')
     if message.text:
         await bot.send_photo(
@@ -201,6 +205,8 @@ async def add_lesson(message: types.Message, state: FSMContext):
             caption=f'{message.text}\n\n'
                     f'🗑 o`chirish uchun mahsus code - {file_unique_id}'
                     f' (faqat adminlarga ko`rinadi)')
+        await db.add_lesson(button_name=f'{button_name}', file_id=file,file_unique_id=file_unique_id)
+
         await state.finish()
     else:
         await message.answer('🚫 Xato\n\n'

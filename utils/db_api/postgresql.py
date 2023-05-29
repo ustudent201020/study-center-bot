@@ -271,7 +271,7 @@ class Database:
         sql = "INSERT INTO lessons (button_name,file_id,file_unique_id,description) VALUES($1,$2,$3,$4) returning *"
         return await self.execute(sql, button_name, file_unique_id, file_id, description, fetchrow=True)
 
-    async def delete_lesson(self, lesson):
+    async def delete_lesson(self, file_unique_id):
         sql = "DELETE FROM lessons WHERE file_unique_id=$1"
         await self.execute(sql, lesson, execute=True)
 
