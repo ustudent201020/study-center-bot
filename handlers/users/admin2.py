@@ -64,8 +64,7 @@ async def go_school(message: types.Message):
 
 @dp.message_handler(state=ShowLessons.show)
 async def show_lessons(message: types.Message, state: FSMContext):
-    print('ishladi')
-    global admins
+\    global admins
     buttons = await db.select_buttons()
     all_buttons_list = []
     for button in buttons:
@@ -629,7 +628,7 @@ async def del_button(message: types.Message, state: FSMContext):
         await state.finish()
     elif message.text in all_buttons_list:
         await db.delete_button_name(button_name=message.text)
-        await db.delete_lesson(lesson=message.text)
+        await db.delete_button_name(button_name=message.text)
         await message.answer("O'chirildi", reply_markup=darslar_key)
         await state.finish()
     else:
