@@ -6,7 +6,7 @@ from aiogram.types import ReplyKeyboardMarkup, KeyboardButton
 
 from data.config import ADMINS
 from keyboards.default.all import menu
-from keyboards.default.rekKeyboards import admin_key, darslar_key
+from keyboards.default.rekKeyboards import admin_key, darslar_key, main_menu
 from keyboards.default.rekKeyboards import back
 from loader import dp, db, bot
 from states.rekStates import RekData, AllState, Lesson, ShowLessons
@@ -106,7 +106,7 @@ async def show_lessons(message: types.Message, state: FSMContext):
                     await message.answer_photo(photo=f"{i[3]}", caption=f'{i[5]}')
 
     elif message.text == '🔝 Bosh menu':
-        await message.answer('Bosh Menu')
+        await message.answer('Bosh Menu',reply_markup=main_menu)
         await state.finish()
     else:
         await message.answer("Ko'rsatilgan bo'limlardan birini tanlang ")
