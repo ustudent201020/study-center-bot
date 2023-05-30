@@ -8,6 +8,7 @@ class AllState(StatesGroup):
 
 class RekData(StatesGroup):
     choice = State()
+    url = State()
     special = State()
     picture = State()
     score = State()

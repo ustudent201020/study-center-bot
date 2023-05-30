@@ -97,7 +97,6 @@ async def add_username(message: types.Message, state: FSMContext):
 @dp.message_handler(state=Lesson.add_video, content_types=['video', 'audio', 'voice', 'photo', 'document', 'text'])
 async def add_lesson(message: types.Message, state: FSMContext):
     if message.video:
-
         await state.update_data(
             {
                 "file_id": message.video.file_id,
@@ -124,7 +123,7 @@ async def add_lesson(message: types.Message, state: FSMContext):
             chat_id=message.from_user.id,
             video=file,
             caption=f'{message.text}\n\n'
-                    f'🗑 o`chirish uchun mahsus code - {file_unique_id}'
+                    f'🗑 o`chirish uchun mahsus code - <code>{file_unique_id}</code>'
                     f' (faqat adminlarga ko`rinadi)')
         await db.add_lesson(button_name=f'{button_name}', file_id=file,
                             file_unique_id=file_unique_id,type='video',description=message.text)
@@ -165,7 +164,7 @@ async def add_lesson(message: types.Message, state: FSMContext):
             chat_id=message.from_user.id,
             audio=file,
             caption=f'{message.text}\n\n'
-                    f'🗑 o`chirish uchun mahsus code - {file_unique_id}'
+                    f'🗑 o`chirish uchun mahsus code - <code>{file_unique_id}</code>'
                     f' (faqat adminlarga ko`rinadi)')
         await db.add_lesson(button_name=f'{button_name}', file_id=file,
                             file_unique_id=file_unique_id,type='audio',description=message.text)
@@ -205,7 +204,7 @@ async def add_lesson(message: types.Message, state: FSMContext):
             chat_id=message.from_user.id,
             photo=file,
             caption=f'{message.text}\n\n'
-                    f'🗑 o`chirish uchun mahsus code - {file_unique_id}'
+                    f'🗑 o`chirish uchun mahsus code - <code>{file_unique_id}</code>'
                     f' (faqat adminlarga ko`rinadi)')
         await db.add_lesson(button_name=f'{button_name}', file_id=file,
                             file_unique_id=file_unique_id,type='photo',description=message.text)
