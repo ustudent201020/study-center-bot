@@ -10,6 +10,7 @@ from keyboards.default.rekKeyboards import admin_key, darslar_key, main_menu
 from keyboards.default.rekKeyboards import back
 from loader import dp, db, bot
 from states.rekStates import RekData, AllState, Lesson, ShowLessons
+from utils.misc import subscription
 
 admins = [935795577]
 
