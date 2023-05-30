@@ -12,7 +12,7 @@ from loader import dp, db, bot
 from states.rekStates import RekData
 
 
-@dp.message_handler(text='Barchaga Xabar Yuborish 🗒', user_id=ADMINS)
+@dp.message_handler(text='Barchaga Xabar Yuborish 🗒')
 async def bot_start(msg: types.Message, state: FSMContext):
     await msg.answer("<b>Xabarni yuboring</b>", reply_markup=back)
     await RekData.choice.set()
@@ -36,6 +36,9 @@ async def contumum(msg: types.Message, state: FSMContext):
             count_baza = await db.count_users()
             count_err = 0
             count = 0
+            await msg.answer('Xabar yuborish boshlandi\n\n'
+                             'Iltimos barchaga habar yuborilguncha kuting')
+
             for user in users:
                 user_id = user[6]
                 try:
@@ -47,10 +50,10 @@ async def contumum(msg: types.Message, state: FSMContext):
                     count_err += 1
                     await asyncio.sleep(0.05)
 
-            await msg.answer(f"Ҳабар юборилганлар: <b>{count}</b> та."
-                             f"\n\nЮборилмаганлар: <b>{count_err}</b> та."
-                             f"\n\nБазада жами: <b>{count_baza}</b> та"
-                             f" фойдаланувчи мавжуд.", reply_markup=admin_key
+            await msg.answer(f"Yuborilganlar: <b>{count}</b> tа."
+                             f"\n\nYuborilmagan: <b>{count_err}</b> tа."
+                             f"\n\Bazada jami: <b>{count_baza}</b> tа"
+                             f" foydalanuvchi mavjud.", reply_markup=admin_key
                              )
 
 @dp.message_handler(text='Mahsus Xabarni Yuborish 🗒', user_id=ADMINS)
