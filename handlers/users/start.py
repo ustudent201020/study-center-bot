@@ -35,6 +35,7 @@ async def fixx(message: types.Message, state: FSMContext):
     await message.answer('bo`ldi')
     await state.finish()
 
+
 @dp.message_handler(commands=['del'])
 async def delete_user(message: types.Message, state: FSMContext):
     await message.answer('Id ni kiriting')
@@ -709,4 +710,6 @@ async def json_reader(message: types.Message):
 
 @dp.message_handler(commands=['dasturchi'])
 async def i_2(message: types.Message):
-    await message.answer('🧑‍💻Dasturchi: @Ilyosbek_Kv')
+    await message.answer(
+        "🧑‍💻Dasturchi: <a href='http://t.me/calll_robot'>Ilyosbek</a> 🧑‍💻",
+        disable_web_page_preview=True)
