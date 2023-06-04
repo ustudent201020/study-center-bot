@@ -604,7 +604,7 @@ async def del_button(message: types.Message, state: FSMContext):
     else:
         await message.answer('Xato\n\nTugmalardan birini tanlang yoki orqaga tugmasini bosing')
 
-@dp.message_handler(text='- Go School')
+@dp.message_handler(text='Go School 👨‍💻')
 async def go_school(message: types.Message):
     status = True
     all = await db.select_chanel()
@@ -625,7 +625,7 @@ async def go_school(message: types.Message):
         but.add(*(KeyboardButton(text=str(button[1])) for button in buttons))
         but.add(KeyboardButton(text='🔝 Bosh menu'))
 
-        await message.answer("Hozir <b>-Go School</b> bo'limidasiz",
+        await message.answer("Hozir <b>Go School 👨‍💻</b> bo'limidasiz",
                              reply_markup=but, disable_web_page_preview=True)
         await ShowLessons.show.set()
     else:
