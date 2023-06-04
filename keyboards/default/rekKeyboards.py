@@ -34,10 +34,10 @@ main_section = ReplyKeyboardMarkup(
 main_menu = ReplyKeyboardMarkup(
     keyboard=[
         [
-            KeyboardButton(text='- Tanlov'),
+            KeyboardButton(text='Konkurs 🎉'),
         ],
         [
-            KeyboardButton(text="- Go School")
+            KeyboardButton(text="Go School 👨‍💻")
         ]
     ], resize_keyboard=True
 )
