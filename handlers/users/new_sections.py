@@ -42,7 +42,7 @@ async def main_menuu(message: types.Message):
             disable_web_page_preview=True)
 
 
-@dp.message_handler(text='- Tanlov')
+@dp.message_handler(text='Konkurs 🎉')
 async def konkurs(message: types.Message):
     status = True
     all = await db.select_chanel()
