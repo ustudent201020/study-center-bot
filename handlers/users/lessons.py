@@ -1,9 +1,6 @@
 from aiogram import types
 from aiogram.dispatcher import FSMContext
 from aiogram.types import KeyboardButton, ReplyKeyboardMarkup
-
-from data.config import ADMINS
-from keyboards.default.all import menu
 from keyboards.default.rekKeyboards import admin_key, darslar_key, save
 from keyboards.default.rekKeyboards import back
 from loader import dp, db, bot
@@ -12,22 +9,21 @@ from states.rekStates import Lesson
 
 @dp.message_handler(text='Remove File')
 async def add_channel(message: types.Message):
-    # buttons = await db.select_buttons()
-    # but = ReplyKeyboardMarkup(row_width=2, resize_keyboard=True, )
-    # but.add(*(KeyboardButton(text=str(button[1])) for button in buttons))
-    # but.add(KeyboardButton(text='🔙️ Orqaga'))
     await message.answer(
         text="Barcha ma'lumotlar o'chadi\n\nBarchasiga rozimisiz\n\nHa bo'lsa file_unique_id ni kiriting",
         reply_markup=back
     )
-    await Lesson.but_del.les_del()
+    await Lesson.les_del.set()
 
 
 @dp.message_handler(state=Lesson.les_del)
 async def del_button(message: types.Message, state: FSMContext):
     txt = message.text
-    lessons = await db.select_lessons()
     unique_id = []
+
+    lessons = await db.select_lessons()
+    for i in lessons:
+        unique_id.append(i['file_unique_id'])
     for lesson in lessons:
         unique_id.append(lesson[3])
     if txt == '🔙️ Orqaga':
