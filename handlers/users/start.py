@@ -526,7 +526,7 @@ async def score(message: types.Message):
             text += f'<b>...\n{user_order}-o`rin: {message.from_user.full_name}</b> - {user_score} ta\n\n✅ Sizda <b>{ball[4]} ball</b> mavjud.\n\n' \
                     f'Koʼproq doʼstlaringizni taklif qilib, ballingizni oshiring!\n\n' \
                     f'👤 Sizning referal link/havolangiz:\n ' \
-                    f'https://t.me/Barakali_tanlov_bot?start={message.from_user.id} \n' \
+                    f'http://t.me/goenglishuzbot?start={message.from_user.id} \n' \
                     f'<b>Uni koʼproq tanishlaringizga ulashing. Omad!</b>   '
             await message.answer(text=text, disable_web_page_preview=True)
     else:
