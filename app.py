@@ -1,7 +1,7 @@
 from aiogram import executor
 
 from loader import dp, db
-from handlers.users import start
+from handlers.users import start, admin2
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 
 import middlewares, filters, handlers
@@ -23,11 +23,11 @@ async def on_startup(dispatcher):
 
     await set_default_commands(dispatcher)
 
-    # scheduler = AsyncIOScheduler(timezone='Asia/Tashkent')
-
-    # scheduler.add_job(start.send, trigger='interval', seconds=60, kwargs={'bot': Bot})
-    # scheduler.add_job(start.jsonn, trigger='interval', days=11)
-    # scheduler.start()
+    scheduler = AsyncIOScheduler(timezone='Asia/Tashkent')
+    #
+    scheduler.add_job(start.send_JsonFile_to_admin, trigger='interval', days=1)
+    scheduler.add_job(admin2.is_activeeeeeeee, trigger='interval', minutes=120)
+    scheduler.start()
 
     # Bot ishga tushgani haqida adminga xabar berish
     await on_startup_notify(dispatcher)
