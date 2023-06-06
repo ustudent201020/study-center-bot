@@ -218,7 +218,7 @@ activee = 0
 blockk = 0
 
 
-async def is_activeee():
+async def is_activeeeeeeee():
     users = await db.select_all_users()
     global activee
     global blockk
