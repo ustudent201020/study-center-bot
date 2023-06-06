@@ -50,9 +50,9 @@ async def contumum(msg: types.Message, state: FSMContext):
                     count_err += 1
                     await asyncio.sleep(0.05)
 
-            await msg.answer(f"Yuborilganlar: <b>{count}</b> tа."
-                             f"\n\nYuborilmagan: <b>{count_err}</b> tа."
-                             f"\n\Bazada jami: <b>{count_baza}</b> tа"
+            await msg.answer(f"🟡 Yuborilganlar: <b>{count}</b> tа."
+                             f"\n\n⚫️ Yuborilmagan: <b>{count_err}</b> tа."
+                             f"\n\n🔵 Bazada jami: <b>{count_baza}</b> tа"
                              f" foydalanuvchi mavjud.", reply_markup=admin_key
                              )
 
