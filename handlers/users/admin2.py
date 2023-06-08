@@ -112,13 +112,13 @@ async def admin(message: types.Message):
         await message.answer(text='Admin panel',
                              reply_markup=admin_key)
 
+
 @dp.message_handler(commands=['darslar'])
 async def admin(message: types.Message):
     global admins
     if message.from_user.id in admins:
         await message.answer(text='Darslar bo`limi',
                              reply_markup=darslar_key)
-
 
 
 @dp.message_handler(text='Kanal ➕')
@@ -292,6 +292,53 @@ async def channels(message: types.Message):
         await message.answer(f"Kanallar mavjud emas")
 
 
+@dp.message_handler(text='Barchaga Xabar Yuborish 🗒')
+async def bot_start(message: types.Message, state: FSMContext):
+    global admins
+    if message.from_user.id in admins:
+        await message.answer("<b>Xabarni yuboring</b>", reply_markup=back)
+        await RekData.choice.set()
+
+
+@dp.message_handler(content_types=['video', 'audio', 'voice', 'photo', 'document', 'text'],
+                    state=RekData.choice)
+async def contumum(msg: types.Message, state: FSMContext):
+    if msg.text == '🔙️ Orqaga':
+        await msg.answer('Bekor qilindi', reply_markup=admin_key)
+        await state.finish()
+
+    elif msg.video or msg.audio or msg.voice or msg.document or msg.photo or msg.text:
+        if msg.text == 'Barchaga Xabar Yuborish 🗒':
+            await msg.answer('Adashdingiz Shekilli\n\n'
+                             'To`g`ri ma`lumot kirting')
+        else:
+            await state.finish()
+
+            users = await db.select_all_users()
+            count_baza = await db.count_users()
+            count_err = 0
+            count = 0
+            await msg.answer('Xabar yuborish boshlandi\n\n'
+                             'Iltimos barchaga habar yuborilguncha kuting')
+
+            for user in users:
+                user_id = user[6]
+                try:
+                    await msg.send_copy(chat_id=user_id)
+                    count += 1
+                    await asyncio.sleep(0.05)
+
+                except Exception as err:
+                    count_err += 1
+                    await asyncio.sleep(0.05)
+
+            await msg.answer(f"🟡 Yuborilganlar: <b>{count}</b> tа."
+                             f"\n\n⚫️ Yuborilmagan: <b>{count_err}</b> tа."
+                             f"\n\n🔵 Bazada jami: <b>{count_baza}</b> tа"
+                             f" foydalanuvchi mavjud.", reply_markup=admin_key
+                             )
+
+
 @dp.message_handler(text='Hisobni 0 ga tushirish')
 async def channels(message: types.Message):
     global admins
@@ -370,6 +417,7 @@ async def change_picture_(message: types.Message, state: FSMContext):
     else:
         await message.answer('Faqat Text qabul qilamiz')
 
+
 @dp.message_handler(text="Bot havolasi")
 async def change_picture(message: types.Message):
     global admins
@@ -404,7 +452,6 @@ async def url(message: types.Message, state: FSMContext):
                 await state.finish()
         else:
             await message.answer('Faqat Text qabul qilamiz')
-
 
 
 @dp.message_handler(text="Sovg'alar ro'yxatini kiritish 📄")
@@ -604,6 +651,7 @@ async def del_button(message: types.Message, state: FSMContext):
     else:
         await message.answer('Xato\n\nTugmalardan birini tanlang yoki orqaga tugmasini bosing')
 
+
 @dp.message_handler(text='Go School 👨‍💻')
 async def go_school(message: types.Message):
     status = True
@@ -686,7 +734,7 @@ async def show_lessons(message: types.Message, state: FSMContext):
                     await message.answer_photo(photo=f"{i[3]}", caption=f'{i[5]}')
 
     elif message.text == '🔝 Bosh menu':
-        await message.answer('Bosh Menu',reply_markup=main_menu)
+        await message.answer('Bosh Menu', reply_markup=main_menu)
         await state.finish()
     else:
         await message.answer("Ko'rsatilgan bo'limlardan birini tanlang ")
