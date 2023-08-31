@@ -83,7 +83,7 @@ async def bot_answer_content_type(call, bot_answer, bot_dict):
 
     elif call.message.content_type == 'text':
         bot_dict['user_question'] = call.message.text
-        user_question_text = f"Фойдаланувчи саволи:\n\n{call.message.text}"
+        user_question_text = f"Foydalanuvchu Xati:\n\n{call.message.text}"
         bot_dict['user_question_text'] = user_question_text
         await call.message.answer(f'{user_question_text}{bot_answer}', reply_markup=bot_answer_keyboard)
 

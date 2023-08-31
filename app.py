@@ -13,7 +13,6 @@ async def on_startup(dispatcher):
     # await db.drop_Chanel()
     # await db.drop_elements()
     # await db.drop_lessons()
-    await db.drop_users()
     await db.create_table_chanel()
     await db.create_table_users()
     await db.create_table_lessons()

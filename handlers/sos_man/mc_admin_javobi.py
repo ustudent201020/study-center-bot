@@ -35,7 +35,7 @@ async def admin_answer_one(msg: Message, state: FSMContext):
         mc_one['document_id'] = msg.document.file_id
         mc_one['document_caption'] = msg.caption
 
-    await msg.answer('Жавобингиз қабул қилинди! Саволни базада қолдирасизми ёки ўчирасизми?',
+    await msg.answer('Javobingiz qabul qilindi!!! Xat bazada qolsinmi yoki o"chirilsinmi?',
                      reply_markup=admin_yes_no)
     await ManAdmin.admin_two.set()
 
@@ -225,16 +225,16 @@ async def admin_answer_fcheck(call: CallbackQuery, state: FSMContext):
                 await admin_check_delete(answer=man_dict_one['voice_admin_unique'], type_db=voice_db, boshqa=True)
 
         if len(all_questions) == 1:
-            await call.message.answer('Базада саволлар мавжуд эмас!')
+            await call.message.answer('Bazada Savollar mavjud emas!')
             await state.finish()
         else:
             user_questions = await sdb.select_all_manuser(user_id=user_id)
             if len(user_questions) > 0:
-                await call.message.answer('Фойдаланувчи саволлари бўлимига қайтасизми?',
+                await call.message.answer('Xatlar bo"limiga qaytasizmi?',
                                           reply_markup=user_check_ikeys)
                 await ManAdmin.admin_delone.set()
             else:
-                await call.message.answer('❓ Саволлар бўлими', reply_markup=await button_one())
+                await call.message.answer('Xatlar bo"limi', reply_markup=await button_one())
                 await ManAdmin.SOS_one.set()
         man_state_dict.clear()
         mc_one.clear()
@@ -261,5 +261,5 @@ async def admin_check_delete_one(call: CallbackQuery):
                            photo_db=photo_db, text_db=text_db, video_db=video_db, voice_db=voice_db)
         await ManAdmin.SOS_two.set()
     elif call.data == 'user_check_no':
-        await call.message.answer('❓ Саволлар бўлими', reply_markup=await button_one())
+        await call.message.answer('Xatlar bo"limi', reply_markup=await button_one())
         await ManAdmin.SOS_one.set()

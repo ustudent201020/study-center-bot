@@ -1,13 +1,13 @@
 from loader import bot
 
-your_question = '<b>Сизнинг саволингиз:</b>\n\n'
-admin_text = '<b>\n\nАдмин жавоби:</b>\n\n'
-no_caption = 'Хабарингиз матнсиз!'
+your_question = '<b>Sizning Savolingiz:</b>\n\n'
+admin_text = '<b>\n\nAdmin Javobi:</b>\n\n'
+no_caption = 'Xabaringiz Matni!'
 caption_answer = your_question + no_caption
 
 
 async def admin_answer_func(call, gender_state):
-    user_question = "Фойдаланувчи саволи:\n\n"
+    user_question = "Foydalanuvchi Savoli:\n\n"
     if call.message.content_type == 'audio':
         gender_state['audio_admin_unique'] = call.message.audio.file_unique_id
         gender_state['audio_admin_caption'] = call.message.caption
@@ -46,7 +46,7 @@ async def admin_answer_func(call, gender_state):
         gender_state['voice_admin_id'] = call.message.voice.file_id
         await call.message.answer_voice(voice=call.message.voice.file_id,
                                         caption=f'{user_question}{call.message.caption}')
-    await call.message.answer('Жавобингизни киритинг:')
+    await call.message.answer('Javobingizni Kiriting:')
 
 
 async def audio_answer_admin(user_id, gender_id, gender_caption):

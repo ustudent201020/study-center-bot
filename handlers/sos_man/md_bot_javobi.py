@@ -28,7 +28,7 @@ async def adm_answer_fone(call: CallbackQuery, state: FSMContext):
 
     elif call.data == 'send_answer':
         bot_answer = await sdb.select_bot_answer(gender='man')
-        user_question = 'Сизнинг саволингиз\n\n'
+        user_question = 'Sizning Xatingiz\n\n'
 
         if call.message.content_type == 'audio':
             await bot.send_audio(chat_id=user_id, audio=call.message.audio.file_id, caption=f'{user_question}'
@@ -61,18 +61,18 @@ async def adm_answer_fone(call: CallbackQuery, state: FSMContext):
                                  caption=f'{user_question}{call.message.caption}')
             await sdb.delete_man_unique(unique_id=call.message.voice.file_unique_id)
 
-        await call.answer('Жавоб юборилди ва савол базадан ўчирилди!', show_alert=True)
+        await call.answer('Javob yuborildi va savol bazadan o"chirildi!', show_alert=True)
         user_questions = await sdb.select_all_manuser(user_id=user_id)
         if len(user_questions) > 0:
-            await call.message.answer('Фойдаланувчи саволлари бўлимига қайтасизми?', reply_markup=user_check_ikeys)
+            await call.message.answer('Xatlar bo"limiga qaytasizmi?', reply_markup=user_check_ikeys)
             await ManAdmin.admin_delone.set()
         else:
             all_users_db = await sdb.select_all_man()
             if len(all_users_db) == 0:
-                await call.message.answer('Базада саволлар мавжуд эмас!')
+                await call.message.answer('Bazada Xatlar mavjud emas!')
                 await state.finish()
             else:
-                await call.message.answer('❓ Саволлар бўлими', reply_markup=await button_one())
+                await call.message.answer('Xatlar bo"limi', reply_markup=await button_one())
                 await ManAdmin.SOS_one.set()
 
     elif call.data == 'back_bot_answer':
@@ -84,7 +84,7 @@ async def adm_answer_fone(call: CallbackQuery, state: FSMContext):
 @dp.message_handler(state=ManAdmin.bot_addone)
 async def bat_one_func(msg: Message):
     try:
-        await msg.answer('Жавоб қабул қилинди! Тасдиқлайсизми?', reply_markup=check_bot_answer)
+        await msg.answer('Javob qabul qilindi!!! Tasdiqlaysizmi?', reply_markup=check_bot_answer)
         add_bot_answer['add_bot_answer'] = msg.text
         await ManAdmin.bot_two.set()
     except Exception as err:
@@ -122,7 +122,7 @@ async def adm_answer_ftwo(msg: Message, state: FSMContext):
     try:
         await sdb.update_bot_answerman(text=msg.text, gender='man')
         await msg.answer(text='Бот жавоби ўзгартирилди!')
-        await msg.answer('❓ Саволлар бўлими', reply_markup=await button_one())
+        await msg.answer('Xatlar bo"limi', reply_markup=await button_one())
         await ManAdmin.SOS_one.set()
     except Exception as err:
         logging.info(err)

@@ -100,28 +100,28 @@ async def group_ans_three(call: CallbackQuery, state: FSMContext):
             elif call.message.content_type == 'voice':
                 await admin_check_delete(answer=call.message.voice.file_unique_id,
                                          type_db=voice_db, boshqa=True)
-            await call.answer(text='Савол базадан ўчирилди!', show_alert=True)
+            await call.answer(text='Savol Bazadan O"chirildi!', show_alert=True)
 
             await call.message.delete()
             all_users_db = await sdb.select_all_man()
             user_questions = await sdb.select_all_manuser(user_id=user_id)
             if len(user_questions) == 0:
                 if len(all_users_db) == 0:
-                    await call.message.answer('Базада саволлар мавжуд эмас!')
+                    await call.message.answer('Bazada Savollar Mavjud Emas!')
                     await state.finish()
                 else:
-                    await call.message.answer('❓ Саволлар бўлими', reply_markup=await button_one())
+                    await call.message.answer('❓ Savollar bo"limi', reply_markup=await button_one())
                     await ManAdmin.SOS_one.set()
         elif call.data == 'back_answer_true':
-            await call.message.answer('❓ Саволлар бўлими', reply_markup=await button_one())
+            await call.message.answer('❓ Savollar Bo"limi', reply_markup=await button_one())
             await ManAdmin.SOS_one.set()
         elif call.data == 'back_answer_false':
             all_users_db = await sdb.select_all_man()
             if len(all_users_db) == 0:
-                await call.message.answer('Базада саволлар мавжуд эмас!')
+                await call.message.answer('Bazada Savollar Mavjud emas!')
                 await state.finish()
             else:
-                await call.message.answer('❓ Саволлар бўлими', reply_markup=await button_one())
+                await call.message.answer('❓ Savollar bo"limi', reply_markup=await button_one())
                 await ManAdmin.SOS_one.set()
     except Exception as err:
         logging.info(err)
