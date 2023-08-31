@@ -670,7 +670,8 @@ async def go_school(message: types.Message):
     if status:
         buttons = await db.select_buttons()
         but = ReplyKeyboardMarkup(row_width=2, resize_keyboard=True, )
-        but.add(*(KeyboardButton(text=str(button[1])) for button in buttons))
+        but.insert(*(KeyboardButton(text=str(button[1])) for button in buttons))
+        but.add(KeyboardButton(text='Motivatsion Xat yuborish ✍️'))
         but.add(KeyboardButton(text='🔝 Bosh menu'))
 
         await message.answer("Hozir <b>Go School 👨‍💻</b> bo'limidasiz",

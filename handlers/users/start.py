@@ -8,9 +8,9 @@ from aiogram import types
 from aiogram.types import ParseMode, InputFile, ReplyKeyboardMarkup, KeyboardButton
 from aiogram.dispatcher import FSMContext
 from aiogram.dispatcher.filters import Command, CommandStart
-from openpyxl import Workbook
+# from openpyxl import Workbook
 
-from data.config import CHANNELS, ADMINS
+from data.config import ADMINS
 from keyboards.default.all import number, menu
 from keyboards.inline.all import check_button, invite_button
 from loader import bot, dp, db
@@ -48,6 +48,7 @@ async def delete(message: types.Message, state: FSMContext):
     await message.answer('O"chirildi')
     await state.finish()
 
+
 @dp.message_handler(text='fix', user_id=ADMINS)
 async def update_scoreee(message: types.Message):
     await message.answer('id va balni kiriting')
@@ -60,6 +61,7 @@ async def fixx(message: types.Message, state: FSMContext):
     await db.update_user_score(score=int(user_text[0]), telegram_id=int(user_text[1]))
     await message.answer('bo`ldi')
     await state.finish()
+
 
 @dp.message_handler(commands=['upscore'])
 async def delete_user(message: types.Message, state: FSMContext):
@@ -303,40 +305,35 @@ async def phone_number(message: types.Message, state: FSMContext):
 
     user = await db.select_user(telegram_id=message.from_user.id)
     numberr = f'{message.contact.phone_number}'
-    if numberr.startswith("+998") or numberr.startswith("998"):
-        if user[3] is None or user[4] == 0:
-            try:
-                user_telephone_num = await db.update_user_phone(phone=message.contact.phone_number,
-                                                                telegram_id=message.from_user.id)
-            except:
-                pass
-            if user[4] == 0 or user[4] is None:
-                user = await db.update_user_score(score=scoree, telegram_id=message.from_user.id)
-            try:
-                args = await db.select_user(telegram_id=message.from_user.id)
-                args_user = await db.select_user(telegram_id=int(args[7]))
+    if user[3] is None or user[4] == 0:
+        try:
+            user_telephone_num = await db.update_user_phone(phone=message.contact.phone_number,
+                                                            telegram_id=message.from_user.id)
+        except:
+            pass
+        if user[4] == 0 or user[4] is None:
+            user = await db.update_user_score(score=scoree, telegram_id=message.from_user.id)
+        try:
+            args = await db.select_user(telegram_id=message.from_user.id)
+            args_user = await db.select_user(telegram_id=int(args[7]))
 
-                update_score = int(args_user[4]) + scoree
-                await db.update_user_score(score=update_score, telegram_id=int(args[7]))
-                await bot.send_message(chat_id=int(args[7]),
-                                       text=f"👤 Yangi ishtirokchi qo`shildi\n"
-                                            f"🎗 Sizning balingiz {update_score},"
-                                            f" ko`proq do`stlaringizni taklif qiling!")
-            except Exception as e:
-                pass
-            # await message.answer(f"<b>🎉 Tabriklaymiz ✅, Siz boshlang`ich {scoree} balga ega bo`ldingiz!</b>",
-            # disable_web_page_preview=True)
-            await message.answer("<b>🎉Tabriklaymiz, siz tanlov ishtirokchisiga aylandingiz!</b>\n\n"
-                                 "Quyidagi menudan kerakli bo`limni tanlang 👇",
-                                 reply_markup=main_menu, disable_web_page_preview=True)
-            await state.finish()
-        else:
-            await message.answer("<b>Quyidagi menudan kerakli bo`limni tanlang 👇</b>",
-                                 reply_markup=main_menu, disable_web_page_preview=True)
-            await state.finish()
+            update_score = int(args_user[4]) + scoree
+            await db.update_user_score(score=update_score, telegram_id=int(args[7]))
+            await bot.send_message(chat_id=int(args[7]),
+                                   text=f"👤 Yangi ishtirokchi qo`shildi\n"
+                                        f"🎗 Sizning balingiz {update_score},"
+                                        f" ko`proq do`stlaringizni taklif qiling!")
+        except Exception as e:
+            pass
+        # await message.answer(f"<b>🎉 Tabriklaymiz ✅, Siz boshlang`ich {scoree} balga ega bo`ldingiz!</b>",
+        # disable_web_page_preview=True)
+        await message.answer("<b>🎉Tabriklaymiz, siz tanlov ishtirokchisiga aylandingiz!</b>\n\n"
+                             "Quyidagi menudan kerakli bo`limni tanlang 👇",
+                             reply_markup=main_menu, disable_web_page_preview=True)
+        await state.finish()
     else:
-        await message.answer('Kechirasiz Faqat O`zbekiston raqamlarini qabul qilamiz',
-                             reply_markup=types.ReplyKeyboardRemove())
+        await message.answer("<b>Quyidagi menudan kerakli bo`limni tanlang 👇</b>",
+                             reply_markup=main_menu, disable_web_page_preview=True)
         await state.finish()
 
 
@@ -512,7 +509,7 @@ async def score(message: types.Message):
     if status:
         ball = await db.select_user(telegram_id=message.from_user.id)
         counter = 1
-        text = '<b>📊 Tanlovimizda eng koʼp doʼstini taklif qilib, yuqori ball toʼplaganlar reytingi:</b>\n\n'
+        text = '📊 Tanlovimizda eng koʼp doʼstini taklif qilib, yuqori ball toʼplaganlar reytingi:\n\n'
         elements = await db.get_elements()
         winners = 21
         list_all_score = await db.select_top_users_list()
@@ -530,17 +527,14 @@ async def score(message: types.Message):
         #     winners += int(i["winners"])
         # top = await db.select_top_users(lim_win=winners)
         for i in list_all_score:
-            text += f"<b>🏅{counter}-o'rin</b> : {i[1]} - {i[4]} ta\n"
+            text += f"🏅{counter}-o'rin : {i[1]} - {i[4]} ta\n"
             counter += 1
             if counter == winners:
                 break
         if counter:
-            text += f'<b>...\n{user_order}-o`rin: {message.from_user.full_name}</b> - {user_score} ta\n\n✅ Sizda <b>{ball[4]} ball</b> mavjud.\n\n' \
-                    f'Koʼproq doʼstlaringizni taklif qilib, ballingizni oshiring!\n\n' \
-                    f'👤 Sizning referal link/havolangiz:\n ' \
-                    f'http://t.me/goenglishuzbot?start={message.from_user.id} \n' \
-                    f'<b>Uni koʼproq tanishlaringizga ulashing. Omad!</b>   '
-            await message.answer(text=text, disable_web_page_preview=True)
+            text += f'...\n{user_order}-o`rin: {message.from_user.full_name} - {user_score} ta\n\n✅ Sizda {ball[4]} ball mavjud.\n\n' \
+                    f'Koʼproq doʼstlaringizni taklif qilib, ballingizni oshiring!'
+            await message.answer(text=text, parse_mode='')
     else:
         button = types.InlineKeyboardMarkup(row_width=1, )
         counter = 0
@@ -614,6 +608,7 @@ async def jsonnn(message: types.Message):
     document = open('users.json')
     await bot.send_document(message.from_user.id, document=document)
 
+
 async def send_JsonFile_to_admin():
     user_list = []
     userss = await db.select_all_users()
@@ -632,43 +627,42 @@ async def send_JsonFile_to_admin():
     await bot.send_document(935795577, document=document)
 
 
-
-@dp.message_handler(text="Excel File")
-async def marathon(message: types.Message):
-    elements = await db.get_elements()
-    winners_ball = 1
-    for i in elements:
-        winners_ball += int(i["winners"])
-
-    wb = Workbook()
-    ws = wb.active
-    ws['A1'] = "№"
-    ws['B1'] = 'NAME'
-    ws['C1'] = "BAll"
-
-    # Rows can also be appended
-    userss = await db.select_top_users_list()
-    counter = 0
-    for user in userss:
-        if user[4] <= winners_ball:
-            continue
-        else:
-            counter += 1
-            ws.append([f"{counter}-o'rin", f"{user[1]}", f"{user[4]}-ball"])
-
-    # Python types will automatically be converted
-    # import datetime
-    # ws['A2'] = datetime.datetime.now()
-    # for i in ws['A1']:
-    #     print(i.value)
-    n = random.choices(string.ascii_lowercase, k=2)
-    c = random.choices(string.ascii_lowercase, k=2)
-    m = random.choices(string.ascii_lowercase, k=2)
-
-    wb.save(f"{n}-{m}.xlsx")
-    file = InputFile(path_or_bytesio=f'{n}-{m}.xlsx')
-    await message.answer_document(document=file)
-    os.remove(f"{n}-{m}.xlsx")
+# @dp.message_handler(text="Excel File")
+# async def marathon(message: types.Message):
+#     elements = await db.get_elements()
+#     winners_ball = 1
+#     for i in elements:
+#         winners_ball += int(i["winners"])
+#
+#     wb = Workbook()
+#     ws = wb.active
+#     ws['A1'] = "№"
+#     ws['B1'] = 'NAME'
+#     ws['C1'] = "BAll"
+#
+#     # Rows can also be appended
+#     userss = await db.select_top_users_list()
+#     counter = 0
+#     for user in userss:
+#         if user[4] <= winners_ball:
+#             continue
+#         else:
+#             counter += 1
+#             ws.append([f"{counter}-o'rin", f"{user[1]}", f"{user[4]}-ball"])
+#
+#     # Python types will automatically be converted
+#     # import datetime
+#     # ws['A2'] = datetime.datetime.now()
+#     # for i in ws['A1']:
+#     #     print(i.value)
+#     n = random.choices(string.ascii_lowercase, k=2)
+#     c = random.choices(string.ascii_lowercase, k=2)
+#     m = random.choices(string.ascii_lowercase, k=2)
+#
+#     wb.save(f"{n}-{m}.xlsx")
+#     file = InputFile(path_or_bytesio=f'{n}-{m}.xlsx')
+#     await message.answer_document(document=file)
+#     os.remove(f"{n}-{m}.xlsx")
 
 
 @dp.message_handler(text="G'oliblar haqida ma'lumot")
