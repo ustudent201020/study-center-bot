@@ -21,6 +21,7 @@ async def on_startup(dispatcher):
     #############################
     await sdb.create()
     await sdb.create_table_man_sos()
+    await sdb.create_table_bot_answer()
 
     await set_default_commands(dispatcher)
 
